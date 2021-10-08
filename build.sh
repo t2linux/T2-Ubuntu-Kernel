@@ -2,11 +2,10 @@
 
 set -eu -o pipefail
 
-## Update docker image tag, because kernel build is using `uname -r` when defining package version variable
-# KERNEL_VERSION=$(curl -s https://www.kernel.org | grep '<strong>' | head -3 | tail -1 | cut -d'>' -f3 | cut -d'<' -f1)
-KERNEL_VERSION=hwe-5.13
+KERNEL_BRANCH=hwe-5.13
 UBUNTU_REL=14.14
 PKGREL=2
+KERNEL_VERSION="5.13-${UBUNTU_REL}-hwe"
 KERNEL_REPOSITORY=git://git.launchpad.net/~ubuntu-kernel/ubuntu/+source/linux/+git/focal
 REPO_PATH=$(pwd)
 WORKING_PATH=/home/work
@@ -42,7 +41,7 @@ apt-get install -y build-essential fakeroot libncurses-dev bison flex libssl-dev
   bc rsync cpio dh-modaliases debhelper kernel-wedge curl
 
 ### get Kernel
-git clone --depth 1 --single-branch --branch "${KERNEL_VERSION}" \
+git clone --depth 1 --single-branch --branch "${KERNEL_BRANCH}" \
   "${KERNEL_REPOSITORY}" "${KERNEL_PATH}"
 cd "${KERNEL_PATH}" || exit
 
