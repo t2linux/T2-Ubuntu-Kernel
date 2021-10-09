@@ -7,6 +7,7 @@ UBUNTU_REL=14.14
 PKGREL=2
 KERNEL_VERSION="5.13-${UBUNTU_REL}-hwe"
 KERNEL_REPOSITORY=git://git.launchpad.net/~ubuntu-kernel/ubuntu/+source/linux/+git/focal
+KERNEL_COMMIT_HASH=8fa29863b7f5c31c2efb98788d4d26a16a4e2f68
 REPO_PATH=$(pwd)
 WORKING_PATH=/home/work
 KERNEL_PATH="${WORKING_PATH}/linux-kernel"
@@ -43,7 +44,8 @@ apt-get install -y build-essential fakeroot libncurses-dev bison flex libssl-dev
 ### get Kernel
 git clone --depth 1 --single-branch --branch "${KERNEL_BRANCH}" \
   "${KERNEL_REPOSITORY}" "${KERNEL_PATH}"
-cd "${KERNEL_PATH}" || exit
+cd "${KERNEL_PATH}"
+git checkout "${KERNEL_COMMIT_HASH}" || exit
 
 #### Create patch file with custom drivers
 echo >&2 "===]> Info: Creating patch file... "
