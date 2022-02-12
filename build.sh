@@ -46,7 +46,7 @@ cd "${KERNEL_PATH}" || exit
 
 #### Create patch file with custom drivers
 echo >&2 "===]> Info: Creating patch file... "
-KERNEL_VERSION="${KERNEL_VERSION}" WORKING_PATH="${WORKING_PATH}" "${REPO_PATH}/patch_driver.sh"
+#KERNEL_VERSION="${KERNEL_VERSION}" WORKING_PATH="${WORKING_PATH}" "${REPO_PATH}/patch_driver.sh"
 
 #### Apply patches
 cd "${KERNEL_PATH}" || exit
