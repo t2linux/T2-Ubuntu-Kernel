@@ -15,6 +15,9 @@ PKGREL=1
 if [[ $USE_T2LINUX_REPO = true ]]
 then
 KERNEL_REPOSITORY=https://github.com/t2linux/kernel.git
+# Remove patches already present
+rm "$(pwd)"/patches/0001*
+rm "$(pwd)"/patches/4010*
 else
 #KERNEL_REPOSITORY=git://kernel.ubuntu.com/virgin/linux-stable.git
 KERNEL_REPOSITORY=https://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable.git
@@ -44,13 +47,6 @@ rm -rfv ./*.deb
 mkdir "${WORKING_PATH}" && cd "${WORKING_PATH}"
 cp -rf "${REPO_PATH}"/{patches,templates} "${WORKING_PATH}"
 rm -rf "${KERNEL_PATH}"
-
-if [[ $USE_T2LINUX_REPO = true ]]
-then
-# Remove patches already present
-rm "${REPO_PATH}/patches/0001*"
-rm "${REPO_PATH}/patches/4010*"
-fi
 
 ### Dependencies
 export DEBIAN_FRONTEND=noninteractive
