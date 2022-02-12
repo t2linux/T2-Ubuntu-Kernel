@@ -2,14 +2,14 @@
 
 set -eu -o pipefail
 
-USE_T2LINUX_REPO=true
+USE_T2LINUX_REPO=false
 if [[ ($USE_T2LINUX_REPO != true) && ($USE_T2LINUX_REPO != false) ]]
 then
 echo "Abort!"
 exit 1
 fi
 
-KERNEL_VERSION=5.15.21
+KERNEL_VERSION=5.15.23
 PKGREL=1
 
 if [[ $USE_T2LINUX_REPO = true ]]
