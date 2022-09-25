@@ -2,13 +2,13 @@
 
 Ubuntu/Mint/Debian kernel with Apple T2 patches built-in. This repo will try to keep up with kernel new releases.
 
-![Build Kernel Package](https://github.com/t2linux/T2-Ubuntu-Kernel/actions/workflows/build.yml/badge.svg?branch=Ubuntu)
+![Build Kernel Package](https://github.com/t2linux/T2-Ubuntu-Kernel/actions/workflows/build.yml/badge.svg?branch=Mainline)
 
 This project is closely inspired by mikeeq/mbp-fedora-kernel and marcosfad/mbp-ubuntu-kernel. Thank you @mikeeq and @marcosfad for the scripts and setup.
 
 Special thanks to @Redecorating for the CI.
 
-**If this repo helped you in any way, consider inviting a coffee to the people in the [credits](https://github.com/t2linux/T2-Ubuntu-Kernel#credits). (links given [here](https://wiki.t2linux.org/contribute/))**
+**If this repo helped you in any way, consider inviting a coffee to the people in the [credits](https://github.com/t2linux/T2-Ubuntu-Kernel#credits) (links given [here](https://wiki.t2linux.org/contribute/)).**
 
 ## Pre installation steps
 
@@ -29,11 +29,18 @@ If you want to install an older kernel (i.e. older than 5.16.2 or 5.15.16 (LTS))
 
 ### Using the Kernel Upgrade script
 
-Firstly get a copy of the kernel upgrade script by running :-
+Firstly add the **t2-ubuntu-repo** apt repo :-
 
 ```bash
-sudo wget https://raw.githubusercontent.com/t2linux/T2-Ubuntu-Kernel/Mainline/update_t2_kernel -P /usr/bin
-sudo chmod 755 /usr/bin/update_t2_kernel
+curl -s --compressed "https://adityagarg8.github.io/t2-ubuntu-repo/KEY.gpg" | sudo apt-key add -
+sudo curl -s --compressed -o /etc/apt/sources.list.d/t2.list "https://adityagarg8.github.io/t2-ubuntu-repo/t2.list"
+sudo apt update
+```
+
+Then, install the script by running :-
+
+```bash
+sudo apt install t2-kernel-script
 ```
 
 Now, whenever you wish to upgrade your kernel, run :-
@@ -49,7 +56,11 @@ In case you want to download the latest LTS release, instead of the Mainline one
 
 Download the .deb packages of **linux-headers** and **linux-image** of the kernel you wish to install from the [releases](https://github.com/t2linux/T2-Ubuntu-Kernel/releases) section.
 
-Follow the instructions given there.
+Install **linux-headers** first and then **linux-image** using `apt` and restart your Mac. In case you do not know how to do so, follow the instructions given below. Else you are good to go.
+
+On terminal, type `sudo apt install ` and then drag and drop the **linux-headers** file to the terminal and press enter/return key.
+
+Do the similar process for **linux-images** package.
 
 Restart your Mac.
 
@@ -57,7 +68,7 @@ Restart your Mac.
 
 Clone the repo using
 ```bash
-git clone -b Ubuntu https://github.com/t2linux/T2-Ubuntu-Kernel
+git clone https://github.com/t2linux/T2-Ubuntu-Kernel
 ```
 
 Open a terminal window and run
@@ -67,9 +78,9 @@ cd T2-Ubuntu-Kernel
 sudo ./build.sh
 ```
 
-The kernel shall take around an hour to compile. After that you shall find some .deb packages in `/root/work`.
+The kernel shall take around an hour to compile. After that you shall find three .deb packages in `/root/work`.
 
-Install the **linux-headers** package first using `apt`. Similarly install the other packages.
+Install the **linux-headers** package first using `apt`. In case you do not know how to do so, follow the instructions described in the above **The easy way** section. Similarly install the **linux-image** package too.
 
 Restart your Mac.
 
