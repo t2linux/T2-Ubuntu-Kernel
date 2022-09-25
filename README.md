@@ -29,11 +29,18 @@ If you want to install an older kernel (i.e. older than 5.16.2 or 5.15.16 (LTS))
 
 ### Using the Kernel Upgrade script
 
-Firstly get a copy of the kernel upgrade script by running :-
+Firstly add the **t2-ubuntu-repo** apt repo :-
 
 ```bash
-sudo wget https://raw.githubusercontent.com/t2linux/T2-Ubuntu-Kernel/Mainline/update_t2_kernel -P /usr/bin
-sudo chmod 755 /usr/bin/update_t2_kernel
+curl -s --compressed "https://adityagarg8.github.io/t2-ubuntu-repo/KEY.gpg" | sudo apt-key add -
+sudo curl -s --compressed -o /etc/apt/sources.list.d/t2.list "https://adityagarg8.github.io/t2-ubuntu-repo/t2.list"
+sudo apt update
+```
+
+Then, install the script by running :-
+
+```bash
+sudo apt install t2-kernel-script
 ```
 
 Now, whenever you wish to upgrade your kernel, run :-
