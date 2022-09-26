@@ -1,0 +1,2 @@
+chmod 755 /usr/bin/update_t2_kernel
+update_t2_kernel -v

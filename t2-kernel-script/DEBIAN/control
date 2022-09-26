@@ -1,0 +1,6 @@
+Package: t2-kernel-script
+Version: KVER
+Maintainer: Aditya Garg
+Architecture: amd64
+Description: Kernel upgrade script for Mainline kernels
+Replaces: t2-kernel-script-lts
