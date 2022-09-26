@@ -49,7 +49,11 @@ If you want to install the latest LTS kernels, then run this instead :-
 sudo apt install t2-kernel-script-lts
 ```
 
-Installation of the script should install/upgrade the kernel automatically as well.
+Now, whenever you wish to upgrade your kernel, run :-
+
+```bash
+update_t2_kernel -v
+```
 
 ### Download package manually
 
