@@ -6,7 +6,7 @@ on:
   [push, pull_request]
 
 jobs:
-  lint:
+  Lint:
     runs-on: ubuntu-latest
     steps:
       - name: 'Checkout repo'
@@ -20,10 +20,10 @@ jobs:
           sudo apt-get install shellcheck bash
       - name: 'Analysing the code'
         run: |
-          yamllint .
+          yamllint -c ${{ github.workspace }}/.github/workflows/.ymllint .
           shellcheck ./*.sh
-  build:
-    needs: [lint]
+  Build:
+    needs: [Lint]
     runs-on: ubuntu-latest
     steps:
       - name: 'Checkout Repo'
@@ -76,3 +76,58 @@ jobs:
           prerelease: false
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+  Publish:
+    needs: [Build]
+    runs-on: ubuntu-latest
+    steps:
+      - name: 'Checkout Repo'
+        uses: actions/checkout@v2
+
+      - name: Configure GPG Key
+        run: |
+          echo -n "$GPG_SIGNING_KEY" | base64 --decode | gpg --import
+        env:
+          GPG_SIGNING_KEY: ${{ secrets.GPG_SIGNING_KEY }}
+
+      - name: Get the kernel upgrade script
+        id: publish
+        run: |
+          git clone -b script https://github.com/t2linux/T2-Ubuntu-Kernel.git
+          lts_version=$(cat ${{ github.workspace }}/T2-Ubuntu-Kernel/t2-kernel-script-lts/usr/bin/update_t2_kernel | grep lts_version | awk "NR==1" | cut -d = -f 2)
+          getkernelver=$(curl -sL https://github.com/t2linux/T2-Ubuntu-Kernel/releases | grep "{{ urlEncodedRefName }}" | grep -v "generic" | grep v${lts_version} | cut -d "{" -f 3 | cut -c 25- | head -1)
+          latest=${getkernelver::-76}
+          latestkver=$(echo $latest | cut -d "v" -f 2)
+          echo "ver=${latest}" >> $GITHUB_ENV
+          sed -i "s/KVER/${latestkver}/g" ${{ github.workspace }}/T2-Ubuntu-Kernel/t2-kernel-script-lts/DEBIAN/control
+          chmod 755 ${{ github.workspace }}/T2-Ubuntu-Kernel/t2-kernel-script-lts/DEBIAN/postinst
+          cd ${{ github.workspace }}/T2-Ubuntu-Kernel
+          dpkg-deb --build --root-owner-group t2-kernel-script-lts
+          cd ${{ github.workspace }}
+          git clone https://github.com/AdityaGarg8/t2-ubuntu-repo.git
+          cp -r ${{ github.workspace }}/T2-Ubuntu-Kernel/t2-kernel-script-lts.deb ${{ github.workspace }}/t2-ubuntu-repo
+          cd ${{ github.workspace }}/t2-ubuntu-repo
+
+          # Packages & Packages.gz
+          dpkg-scanpackages --multiversion . > Packages
+          gzip -k -f Packages
+
+          # Release, Release.gpg & InRelease
+          apt-ftparchive release . > Release
+          gpg --default-key "${GPG_SIGNING_EMAIL}" -abs -o - Release > Release.gpg
+          gpg --default-key "${GPG_SIGNING_EMAIL}" --clearsign -o - Release > InRelease
+          cd ${{ github.workspace }}
+        env:
+          GPG_SIGNING_EMAIL: ${{ secrets.GPG_SIGNING_EMAIL }}
+      - name: Publish
+        if: github.ref == 'refs/heads/LTS'
+        uses: cpina/github-action-push-to-another-repository@main
+        env:
+          SSH_DEPLOY_KEY: ${{ secrets.SSH_DEPLOY_KEY }}
+        with:
+          source-directory: 't2-ubuntu-repo'
+          destination-github-username: 'AdityaGarg8'
+          destination-repository-name: 't2-ubuntu-repo'
+          user-email: github-actions[bot]@users.noreply.github.com
+          user-name: github-actions[bot]
+          target-branch: main
+          commit-message: Update to kernel ${{ env.ver }}
