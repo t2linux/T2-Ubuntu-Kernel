@@ -43,14 +43,17 @@ Then, install the script by running :-
 sudo apt install t2-kernel-script
 ```
 
+If you want to install the latest LTS kernels, then run this instead :-
+
+```bash
+sudo apt install t2-kernel-script-lts
+```
+
 Now, whenever you wish to upgrade your kernel, run :-
 
 ```bash
 update_t2_kernel -v
 ```
-#### Case of users wanting latest LTS kernels
-
-In case you want to download the latest LTS release, instead of the Mainline ones, then edit the script by running `sudo gedit /usr/bin/update_t2_kernel` and change `use_lts=false` to `use_lts=true` and save the file. Now, running `update_t2_kernel -v` shall upgrade the kernel to the latest LTS release.
 
 ### Download package manually
 
