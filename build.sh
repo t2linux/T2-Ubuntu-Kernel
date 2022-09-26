@@ -10,7 +10,7 @@ exit 1
 fi
 
 KERNEL_VERSION=5.19.11
-PKGREL=1
+PKGREL=2
 
 if [[ $USE_T2LINUX_REPO = true ]]
 then
@@ -20,7 +20,7 @@ else
 KERNEL_REPOSITORY=https://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable.git
 fi
 
-APPLE_BCE_REPOSITORY=https://github.com/t2linux/apple-bce-drv.git
+APPLE_BCE_REPOSITORY=https://github.com/kekrby/apple-bce.git
 APPLE_IBRIDGE_REPOSITORY=https://github.com/Redecorating/apple-ib-drv.git
 REPO_PATH=$(pwd)
 WORKING_PATH=/root/work
