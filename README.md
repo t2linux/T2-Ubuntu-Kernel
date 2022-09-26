@@ -2,7 +2,7 @@
 
 Ubuntu/Mint/Debian kernel with Apple T2 patches built-in. This repo will try to keep up with kernel new releases.
 
-![Build Kernel Package](https://github.com/t2linux/T2-Ubuntu-Kernel/actions/workflows/build.yml/badge.svg?branch=Mainline)
+![Build Kernel Package](https://github.com/t2linux/T2-Ubuntu-Kernel/actions/workflows/build.yml/badge.svg?branch=Ubuntu)
 
 This project is closely inspired by mikeeq/mbp-fedora-kernel and marcosfad/mbp-ubuntu-kernel. Thank you @mikeeq and @marcosfad for the scripts and setup.
 
@@ -71,7 +71,7 @@ Restart your Mac.
 
 Clone the repo using
 ```bash
-git clone https://github.com/t2linux/T2-Ubuntu-Kernel
+git clone -b Ubuntu https://github.com/t2linux/T2-Ubuntu-Kernel
 ```
 
 Open a terminal window and run
