@@ -119,7 +119,7 @@ jobs:
         env:
           GPG_SIGNING_EMAIL: ${{ secrets.GPG_SIGNING_EMAIL }}
       - name: Publish
-        if: github.ref == 'refs/heads/LTS'
+        if: github.ref == 'refs/heads/test'
         uses: cpina/github-action-push-to-another-repository@main
         env:
           SSH_DEPLOY_KEY: ${{ secrets.SSH_DEPLOY_KEY }}
