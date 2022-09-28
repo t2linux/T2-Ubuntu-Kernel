@@ -1,2 +1,9 @@
 chmod 755 /usr/bin/update_t2_kernel
-update_t2_kernel -v
+if
+zenity --info --text="New Kernel KVER available. Run \"update_t2_kernel -v\" to upgrade your Kernel after the installation completes." 2>/dev/null
+then
+echo "New Kernel KVER available. Run \"update_t2_kernel -v\" to upgrade your Kernel after the installation completes."
+else
+kdialog --msgbox "New Kernel KVER available. Run \"update_t2_kernel -v\" to upgrade your Kernel after the installation completes."
+echo "New Kernel KVER available. Run \"update_t2_kernel -v\" to upgrade your Kernel after the installation completes."
+fi
