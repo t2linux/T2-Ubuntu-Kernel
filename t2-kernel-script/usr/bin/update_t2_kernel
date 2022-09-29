@@ -4,15 +4,8 @@
 if [ $USER != root ]
 then
 sudo chmod 755 $0
-sudo $0 $1 $2
+sudo $0 $1
 exit 0
-fi
-
-if [[ ($1 != -v) && ($2 != -v) ]]
-then
-exec 3>&1 4>&2
-trap 'exec 2>&4 1>&3' 0 1 2 3
-exec 1>/var/log/t2-kernel-update.log 2>&1
 fi
 
 set -e
@@ -66,7 +59,7 @@ if [ \( $latestk != $currentk \) ]; then
 				dpkg -P linux-image-$version
 			fi
 		done
-		if [[ ($1 = --remove-current) || ($2 = --remove-current) ]]; then
+		if [[ ($1 = --remove-current) ]]; then
 			echo "Current kernel linux-image-$currentk shall also be removed"
 
 			dpkg -P linux-headers-$currentk
