@@ -52,8 +52,10 @@ sudo apt install t2-kernel-script-lts
 Now, whenever you wish to upgrade your kernel, run :-
 
 ```bash
-update_t2_kernel -v
+update_t2_kernel
 ```
+
+**Note :-** By default, whenever you run `update_t2_kernel`, the script installs the latest Kernel (LTS or Mainline, depending on your script) as well as preserves the Kernel which is booted during running of the script. Rest all old T2 kernels get removed (self compiled and official Ubuntu Kernels are not affected). In case you wish to remove the Kernel which is booted as well, which may be required which switching to LTS Kernel from Mainline ones, run `update_t2_kernel --remove-current`.
 
 ### Download package manually
 
