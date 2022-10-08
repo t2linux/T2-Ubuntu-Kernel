@@ -1,6 +1,6 @@
 Package: t2-kernel-script-lts
-Version: 2.2.4
+Version: 2.2.5
 Maintainer: Aditya Garg
 Architecture: amd64
 Description: Kernel upgrade script for LTS kernels
-Replaces: t2-kernel-script
+Replaces: t2-kernel-script, t2-kernel-script-debian
