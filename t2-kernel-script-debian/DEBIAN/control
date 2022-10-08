@@ -3,4 +3,4 @@ Version: 1
 Maintainer: Aditya Garg
 Architecture: amd64
 Description: Kernel upgrade script for Debian kernels
-Replaces: t2-kernel-script t2-kernel-script-lts
+Replaces: t2-kernel-script, t2-kernel-script-lts
