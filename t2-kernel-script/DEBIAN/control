@@ -1,6 +1,6 @@
 Package: t2-kernel-script
-Version: 5.17
+Version: 5.17.1
 Maintainer: Aditya Garg
 Architecture: amd64
 Description: Kernel upgrade script for Mainline kernels
-Replaces: t2-kernel-script-lts
+Replaces: t2-kernel-script-lts, t2-kernel-script-debian
