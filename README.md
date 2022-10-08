@@ -1,6 +1,8 @@
 # T2 Ubuntu Kernel
 
-Ubuntu/Mint/Debian kernel with Apple T2 patches built-in. This repo will try to keep up with kernel new releases.
+Ubuntu/Mint kernel with Apple T2 patches built-in. This repo will try to keep up with kernel new releases.
+
+**Note for Debian users :-** Since Debian doesn't support the kernels released in this repo, Debian users are suggested to use [this fork](https://github.com/andersfugmann/T2-Debian-Kernel) to get compatible kernels.
 
 ![Build Kernel Package](https://github.com/t2linux/T2-Ubuntu-Kernel/actions/workflows/build.yml/badge.svg?branch=Ubuntu)
 
