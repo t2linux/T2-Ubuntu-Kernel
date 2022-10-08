@@ -14,7 +14,7 @@ cd /tmp
 
 latest=$(curl -sL https://github.com/andersfugmann/T2-Debian-Kernel/releases/latest/ | grep "<title>Release" | awk -F " " '{print $2}' )
 
-if [[ ${#latest} = 7 ]]
+if [[ (${#latest} = 6) || (${#latest} = 7) ]]
 then
 latestkver=$(echo $latest | cut -d "v" -f 2 | cut -d "-" -f 1 | awk '{print $1".0-1"}')
 latestk=$(echo $latest | cut -c 2- | cut -d "-" -f 1 | awk '{print $1".0-t2"}')
