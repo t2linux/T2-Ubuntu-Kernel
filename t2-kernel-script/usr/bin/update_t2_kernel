@@ -37,13 +37,21 @@ existingK=($(dpkg --list | grep linux-image- | grep 't2\|mbp' | cut -d ' ' -f 2-
 if [ \( $latestk != $currentk \) ]; then
 	
 	echo "Downloading new kernel $latest"
-	curl -L https://github.com/t2linux/T2-Ubuntu-Kernel/releases/download/${latest}/linux-headers-${latestk}_${latestkver}_amd64.deb > headers.deb
-	curl -L https://github.com/t2linux/T2-Ubuntu-Kernel/releases/download/${latest}/linux-image-${latestk}_${latestkver}_amd64.deb > image.deb
+	echo
+	echo "Downloading linux-headers-${latestk}"
+	echo
+	curl -#L https://github.com/t2linux/T2-Ubuntu-Kernel/releases/download/${latest}/linux-headers-${latestk}_${latestkver}_amd64.deb > headers.deb
+	echo
+	echo "Downloading linux-image-${latestk}"
+	echo
+	curl -#L https://github.com/t2linux/T2-Ubuntu-Kernel/releases/download/${latest}/linux-image-${latestk}_${latestkver}_amd64.deb > image.deb
 
 	if [ -f headers.deb -a -f image.deb ]; then
 		#install
-		echo "Installing new kernel $latest"
+		echo -e "\nInstalling new kernel $latest"
+		echo
 		apt install ./headers.deb
+		echo
 		apt install ./image.deb
 		#shutdown -r 02:00 "reboot scheduled for the next 2am to update runnning kernel"
 		rm -f headers.deb image.deb
@@ -52,17 +60,20 @@ if [ \( $latestk != $currentk \) ]; then
 		for kernel in "${existingK[@]}"
 		do
 			if [ \( $kernel != linux-image-$currentk \) ]; then
-				echo "$kernel needs to be removed"
+				echo -e "\n$kernel needs to be removed"
 				version=${kernel/#linux-image-}
 				#purge old t2 kernel
+				echo
 				dpkg -P linux-headers-$version
+				echo
 				dpkg -P linux-image-$version
 			fi
 		done
 		if [[ ($1 = --remove-current) ]]; then
-			echo "Current kernel linux-image-$currentk shall also be removed"
-
+			echo -e "\nCurrent kernel linux-image-$currentk shall also be removed"
+			echo
 			dpkg -P linux-headers-$currentk
+			echo
 			dpkg -P linux-image-$currentk
 		fi
 	fi
