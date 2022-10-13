@@ -2,7 +2,8 @@
 name: APFS driver update script
 
 on:
-  workflow_dispatch:
+  schedule:
+    - cron: '30 20 * * *'
 jobs:
   Publish:
     runs-on: ubuntu-latest
