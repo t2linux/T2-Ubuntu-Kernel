@@ -3,7 +3,7 @@ name: APFS driver update script
 
 on:
   schedule:
-    - cron: '30 20 * * *'
+    - cron: '40 20 * * *'
 jobs:
   Publish:
     runs-on: ubuntu-latest
