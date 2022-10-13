@@ -37,12 +37,10 @@ existingK=($(dpkg --list | grep linux-image- | grep 't2\|mbp' | cut -d ' ' -f 2-
 if [ \( $latestk != $currentk \) ]; then
 	
 	echo "Downloading new kernel $latest"
-	echo
-	echo "Downloading linux-headers-${latestk}"
+	echo -e "\nDownloading linux-headers-${latestk}"
 	echo
 	curl -#L https://github.com/t2linux/T2-Ubuntu-Kernel/releases/download/${latest}/linux-headers-${latestk}_${latestkver}_amd64.deb > headers.deb
-	echo
-	echo "Downloading linux-image-${latestk}"
+	echo -e "\nDownloading linux-image-${latestk}"
 	echo
 	curl -#L https://github.com/t2linux/T2-Ubuntu-Kernel/releases/download/${latest}/linux-image-${latestk}_${latestkver}_amd64.deb > image.deb
 
