@@ -124,7 +124,7 @@ jobs:
           sed -i "s/${{ env.currenthash }}/${{ env.latesthash }}/g" ${{ github.workspace }}/apt-repo/apfs_ver.txt
           git config --local user.email "41898282+github-actions[bot]@users.noreply.github.com"
           git config --local user.name "github-actions[bot]"
-          git commit -m "Update version to ${NEW_RELEASE_VER}" -a
+          git commit -m "Update APFS driver to v${{ env.ver }}" -a
       - name: Push changes to the repo
         if: env.publish == 'yes'
         uses: ad-m/github-push-action@master
