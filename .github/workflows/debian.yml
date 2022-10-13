@@ -52,4 +52,4 @@ jobs:
           user-email: github-actions[bot]@users.noreply.github.com
           user-name: github-actions[bot]
           target-branch: main
-          commit-message: Update LTS kernel update script to v${{ env.ver }}
+          commit-message: Update Debian kernel update script to v${{ env.ver }}
