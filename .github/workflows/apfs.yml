@@ -3,10 +3,10 @@ name: APFS driver update script
 
 on:
   schedule:
-    - cron: '50 14 * * *'
+    - cron: '30 18 * * *'
 
 jobs:
-  Publish:
+  Build and Publish:
     runs-on: ubuntu-latest
     steps:
 
