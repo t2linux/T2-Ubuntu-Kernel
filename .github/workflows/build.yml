@@ -3,7 +3,14 @@ name: Build Kernel Package
 
 # yamllint disable-line rule:truthy
 on:
-  [push, pull_request]
+  push:
+    paths-ignore:
+      - '.github/workflows/*.yml'
+      - 'apt-repo/*.txt'
+  pull_request:
+    paths-ignore:
+      - '.github/workflows/*.yml'
+      - 'apt-repo/*.txt'
 
 jobs:
   Lint:
@@ -38,17 +45,7 @@ jobs:
           #REL=$( git tag |grep -F $VERSION|sort -r|head -n1|tr -d v)
           echo Building $VERSION-$REL
           echo "::set-output name=tag::${VERSION}-${REL}"
-
-          DOCKER_IMAGE=ubuntu:22.04
-          docker pull ${DOCKER_IMAGE}
-          docker run \
-          -t \
-          -v "$(pwd)":/repo \
-          ${DOCKER_IMAGE} \
-          /bin/bash -c 'cd /repo && \
-          mkdir /tmp/artifacts && \
-          ./build.sh && mkdir /repo/debs && \
-          cp -r /tmp/artifacts/* /repo/debs'
+          sudo ./build.sh
 
           cp -r "$(pwd)"/debs/* /tmp/artifacts
           cd /tmp/artifacts
