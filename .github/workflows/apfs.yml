@@ -76,10 +76,10 @@ jobs:
             echo "Description: Apple File System driver for Linux" >> control
             echo "Depends: dkms" >> control
 
-            echo "dkms add -m linux-apfs -v ${DKMS_VER}" > postinst
-            echo "dkms build -m linux-apfs -v ${DKMS_VER} && dkms install -m linux-apfs -v ${DKMS_VER} || true" >> postinst
+            echo "dkms add -m linux-apfs-rw -v ${DKMS_VER}" > postinst
+            echo "dkms build -m linux-apfs-rw -v ${DKMS_VER} && dkms install -m linux-apfs-rw -v ${DKMS_VER} || true" >> postinst
 
-            echo "dkms remove -m linux-apfs -v ${DKMS_VER} --all || true" > prerm
+            echo "dkms remove -m linux-apfs-rw -v ${DKMS_VER} --all || true" > prerm
 
             chmod 755 ./postinst
             chmod 755 ./prerm
