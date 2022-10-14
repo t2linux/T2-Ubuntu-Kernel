@@ -6,7 +6,7 @@ on:
     - cron: '30 18 * * *'
 
 jobs:
-  Build and Publish:
+  Publish:
     runs-on: ubuntu-latest
     steps:
 
