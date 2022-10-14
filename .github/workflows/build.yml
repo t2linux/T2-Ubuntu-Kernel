@@ -3,7 +3,14 @@ name: Build Kernel Package
 
 # yamllint disable-line rule:truthy
 on:
-  [push, pull_request]
+  push:
+    paths-ignore:
+      - '.github/workflows/*.yml'
+      - 'apt-repo/*.txt'
+  pull_request:
+    paths-ignore:
+      - '.github/workflows/*.yml'
+      - 'apt-repo/*.txt'
 
 jobs:
   lint:
