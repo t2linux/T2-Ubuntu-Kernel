@@ -43,7 +43,6 @@ jobs:
           echo "::set-output name=tag::${VERSION}-${REL}"
           sudo ./build.sh
 
-          cp -r "$(pwd)"/debs/* /tmp/artifacts
           cd /tmp/artifacts
           ls -l
           dpkg-scanpackages . /dev/null | gzip -9c > Packages.gz
