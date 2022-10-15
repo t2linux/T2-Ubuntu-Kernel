@@ -5,12 +5,8 @@ name: Build Kernel Package
 on:
   push:
     paths-ignore:
-      - '.github/workflows/*.yml'
       - 'apt-repo/*.txt'
   pull_request:
-    paths-ignore:
-      - '.github/workflows/*.yml'
-      - 'apt-repo/*.txt'
 
 jobs:
   Lint:
