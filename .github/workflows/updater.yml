@@ -1,0 +1,25 @@
+name: GitHub Actions Version Updater
+
+# Controls when the action will run.
+on:
+  # can be used to run workflow manually
+  workflow_dispatch:
+  schedule:
+    # Automatically run eveyday at 12:00 AM IST
+    - cron:  '30 18 * * *'
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v2
+        with:
+          # Access token with `workflow` scope is required
+          token: ${{ secrets.WORKFLOW_SECRET }}
+
+      - name: Run GitHub Actions Version Updater
+        uses: saadmk11/github-actions-version-updater@v0.5.6
+        with:
+          # Access token with `workflow` scope is required
+          token: ${{ secrets.WORKFLOW_SECRET }}
