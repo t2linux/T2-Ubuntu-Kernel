@@ -12,7 +12,7 @@ jobs:
     steps:
 
       - name: 'Checkout Repo'
-        uses: actions/checkout@v2
+        uses: actions/checkout@v2.5.0
         with:
           persist-credentials: false
           fetch-depth: 0
@@ -104,7 +104,7 @@ jobs:
           GPG_SIGNING_EMAIL: ${{ secrets.GPG_SIGNING_EMAIL }}
       - name: Publish
         if: env.publish == 'yes'
-        uses: cpina/github-action-push-to-another-repository@main
+        uses: cpina/github-action-push-to-another-repository@v1.5.1
         env:
           SSH_DEPLOY_KEY: ${{ secrets.SSH_DEPLOY_KEY }}
         with:
@@ -130,7 +130,7 @@ jobs:
           git commit -m "Update APFS driver to v${{ env.ver }}" -a
       - name: Push changes to the repo
         if: env.publish == 'yes'
-        uses: ad-m/github-push-action@master
+        uses: ad-m/github-push-action@v0.6.0
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
           branch: ${{ github.ref }}
