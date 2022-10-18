@@ -33,6 +33,7 @@ latestk=$(echo $latest | cut -c 2- | cut -d "-" -f 1 | awk '{print $1"-t2"}')
 fi
 
 currentk=$(uname -r)
+currentk_external=$(echo "${currentk}" | cut -d "-" -f 2,3)
 existingK=($(dpkg --list | grep linux-image- | grep 't2\|mbp' | cut -d ' ' -f 2-3 ))
 if [ \( $latestk != $currentk \) ]; then
 	
@@ -67,7 +68,7 @@ if [ \( $latestk != $currentk \) ]; then
 				dpkg -P linux-image-$version
 			fi
 		done
-		if [[ ($1 = --remove-current) ]]; then
+		if [[ ($1 = --remove-current) || (${currentk_external} = t2-external) ]]; then
 			echo -e "\nCurrent kernel linux-image-$currentk shall also be removed"
 			echo
 			dpkg -P linux-headers-$currentk
