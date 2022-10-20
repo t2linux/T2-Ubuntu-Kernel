@@ -10,7 +10,7 @@ exit 1
 fi
 
 KERNEL_VERSION=6.0.2
-PKGREL=1
+PKGREL=2
 
 if [[ $USE_T2LINUX_REPO = true ]]
 then
