@@ -1,0 +1,121 @@
+From 8a254d90a77580244ec57e82bca7eb65656cc167 Mon Sep 17 00:00:00 2001
+From: Ard Biesheuvel <ardb@kernel.org>
+Date: Wed, 19 Oct 2022 23:29:58 +0200
+Subject: efi: efivars: Fix variable writes without query_variable_store()
+
+Commit bbc6d2c6ef22 ("efi: vars: Switch to new wrapper layer")
+refactored the efivars layer so that the 'business logic' related to
+which UEFI variables affect the boot flow in which way could be moved
+out of it, and into the efivarfs driver.
+
+This inadvertently broke setting variables on firmware implementations
+that lack the QueryVariableInfo() boot service, because we no longer
+tolerate a EFI_UNSUPPORTED result from check_var_size() when calling
+efivar_entry_set_get_size(), which now ends up calling check_var_size()
+a second time inadvertently.
+
+If QueryVariableInfo() is missing, we support writes of up to 64k -
+let's move that logic into check_var_size(), and drop the redundant
+call.
+
+Cc: <stable@vger.kernel.org> # v6.0
+Fixes: bbc6d2c6ef22 ("efi: vars: Switch to new wrapper layer")
+Signed-off-by: Ard Biesheuvel <ardb@kernel.org>
+---
+ drivers/firmware/efi/vars.c | 10 +++++-----
+ fs/efivarfs/vars.c          | 16 ----------------
+ include/linux/efi.h         |  3 ---
+ 3 files changed, 5 insertions(+), 24 deletions(-)
+
+diff --git a/drivers/firmware/efi/vars.c b/drivers/firmware/efi/vars.c
+index dd74d2ad318408..433b615871395c 100644
+--- a/drivers/firmware/efi/vars.c
++++ b/drivers/firmware/efi/vars.c
+@@ -7,6 +7,7 @@
+  */
+ 
+ #include <linux/types.h>
++#include <linux/sizes.h>
+ #include <linux/errno.h>
+ #include <linux/init.h>
+ #include <linux/module.h>
+@@ -20,19 +21,19 @@ static struct efivars *__efivars;
+ 
+ static DEFINE_SEMAPHORE(efivars_lock);
+ 
+-efi_status_t check_var_size(u32 attributes, unsigned long size)
++static efi_status_t check_var_size(u32 attributes, unsigned long size)
+ {
+ 	const struct efivar_operations *fops;
+ 
+ 	fops = __efivars->ops;
+ 
+ 	if (!fops->query_variable_store)
+-		return EFI_UNSUPPORTED;
++		return (size <= SZ_64K) ? EFI_SUCCESS : EFI_OUT_OF_RESOURCES;
+ 
+ 	return fops->query_variable_store(attributes, size, false);
+ }
+-EXPORT_SYMBOL_NS_GPL(check_var_size, EFIVAR);
+ 
++static
+ efi_status_t check_var_size_nonblocking(u32 attributes, unsigned long size)
+ {
+ 	const struct efivar_operations *fops;
+@@ -40,11 +41,10 @@ efi_status_t check_var_size_nonblocking(u32 attributes, unsigned long size)
+ 	fops = __efivars->ops;
+ 
+ 	if (!fops->query_variable_store)
+-		return EFI_UNSUPPORTED;
++		return (size <= SZ_64K) ? EFI_SUCCESS : EFI_OUT_OF_RESOURCES;
+ 
+ 	return fops->query_variable_store(attributes, size, true);
+ }
+-EXPORT_SYMBOL_NS_GPL(check_var_size_nonblocking, EFIVAR);
+ 
+ /**
+  * efivars_kobject - get the kobject for the registered efivars
+diff --git a/fs/efivarfs/vars.c b/fs/efivarfs/vars.c
+index a0ef63cfcecba1..9e4f47808bd5ad 100644
+--- a/fs/efivarfs/vars.c
++++ b/fs/efivarfs/vars.c
+@@ -651,22 +651,6 @@ int efivar_entry_set_get_size(struct efivar_entry *entry, u32 attributes,
+ 	if (err)
+ 		return err;
+ 
+-	/*
+-	 * Ensure that the available space hasn't shrunk below the safe level
+-	 */
+-	status = check_var_size(attributes, *size + ucs2_strsize(name, 1024));
+-	if (status != EFI_SUCCESS) {
+-		if (status != EFI_UNSUPPORTED) {
+-			err = efi_status_to_err(status);
+-			goto out;
+-		}
+-
+-		if (*size > 65536) {
+-			err = -ENOSPC;
+-			goto out;
+-		}
+-	}
+-
+ 	status = efivar_set_variable_locked(name, vendor, attributes, *size,
+ 					    data, false);
+ 	if (status != EFI_SUCCESS) {
+diff --git a/include/linux/efi.h b/include/linux/efi.h
+index da3974bf05d3e8..80f3c1c7827dd2 100644
+--- a/include/linux/efi.h
++++ b/include/linux/efi.h
+@@ -1085,9 +1085,6 @@ efi_status_t efivar_set_variable_locked(efi_char16_t *name, efi_guid_t *vendor,
+ efi_status_t efivar_set_variable(efi_char16_t *name, efi_guid_t *vendor,
+ 				 u32 attr, unsigned long data_size, void *data);
+ 
+-efi_status_t check_var_size(u32 attributes, unsigned long size);
+-efi_status_t check_var_size_nonblocking(u32 attributes, unsigned long size);
+-
+ #if IS_ENABLED(CONFIG_EFI_CAPSULE_LOADER)
+ extern bool efi_capsule_pending(int *reset_type);
+ 
+-- 
+cgit 
+
