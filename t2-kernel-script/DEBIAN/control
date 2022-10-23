@@ -1,5 +1,5 @@
 Package: t2-kernel-script
-Version: 5.18.1
+Version: 6
 Maintainer: Aditya Garg
 Architecture: amd64
 Description: Kernel upgrade script for Mainline kernels
