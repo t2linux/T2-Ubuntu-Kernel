@@ -125,4 +125,5 @@ echo >&2 "===]> Info: Copying debs and calculating SHA256 ... "
 #cp -rfv "${KERNEL_PATH}/.config" "${REPO_PATH}/kernel_config_${KERNEL_VERSION}"
 cp -rfv "${KERNEL_PATH}/.config" "/tmp/artifacts/kernel_config_${KERNEL_VERSION}-${CODENAME}"
 cp -rfv ../*.deb /tmp/artifacts/
+mv "/tmp/artifacts/linux-libc-dev_${KERNEL_VERSION}-${PKGREL}_amd64.deb" "/tmp/artifacts/linux-libc-dev_${KERNEL_VERSION}-${PKGREL}-${CODENAME}_amd64.deb"
 sha256sum ../*.deb >/tmp/artifacts/sha256-"${CODENAME}"
