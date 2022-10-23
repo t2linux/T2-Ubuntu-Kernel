@@ -4,6 +4,7 @@ Ubuntu/Mint kernel with Apple T2 patches built-in. This repo will try to keep up
 
 **Note for Debian users :-** Since Debian doesn't support the kernels released in this repo, Debian users are suggested to use [this fork](https://github.com/andersfugmann/T2-Debian-Kernel) to get compatible kernels.
 
+![Build Kernel Package - Focal](https://github.com/t2linux/T2-Ubuntu-Kernel/actions/workflows/kernel-focal.yml/badge.svg?branch=Mainline)
 ![Build Kernel Package - Jammy](https://github.com/t2linux/T2-Ubuntu-Kernel/actions/workflows/kernel-jammy.yml/badge.svg?branch=Mainline)
 ![Build Kernel Package - Kinetic](https://github.com/t2linux/T2-Ubuntu-Kernel/actions/workflows/kernel-kinetic.yml/badge.svg?branch=Mainline)
 
