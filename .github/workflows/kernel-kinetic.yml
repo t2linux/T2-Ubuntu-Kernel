@@ -72,7 +72,7 @@ jobs:
         uses: softprops/action-gh-release@v1
         with:
           files: |
-            /tmp/artifacts/sha256
+            /tmp/artifacts/sha256*
             /tmp/artifacts/*.deb
             /tmp/artifacts/kernel_config*
           tag_name: v${{ steps.build.outputs.tag }}
