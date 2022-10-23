@@ -26,10 +26,10 @@ fi
 if [[ (${#latest} = 6) || (${#latest} = 7) ]]
 then
 latestkver=$(echo $latest | cut -d "v" -f 2 | cut -d "-" -f 1 | awk '{print $1".0-1"}')
-latestk=$(echo $latest | cut -c 2- | cut -d "-" -f 1 | awk '{print $1".0-t2"}')
+latestk=$(echo $latest | cut -c 2- | cut -d "-" -f 1 | awk '{print $1".0-t2"}')-$(lsb_release -c | cut -d ":" -f 2 | xargs)
 else
 latestkver=$(echo $latest | cut -d "v" -f 2)
-latestk=$(echo $latest | cut -c 2- | cut -d "-" -f 1 | awk '{print $1"-t2"}')
+latestk=$(echo $latest | cut -c 2- | cut -d "-" -f 1 | awk '{print $1"-t2"}')-$(lsb_release -c | cut -d ":" -f 2 | xargs)
 fi
 
 currentk=$(uname -r)
