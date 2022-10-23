@@ -4,7 +4,8 @@ Ubuntu/Mint kernel with Apple T2 patches built-in. This repo will try to keep up
 
 **Note for Debian users :-** Since Debian doesn't support the kernels released in this repo, Debian users are suggested to use [this fork](https://github.com/andersfugmann/T2-Debian-Kernel) to get compatible kernels.
 
-![Build Kernel Package](https://github.com/t2linux/T2-Ubuntu-Kernel/actions/workflows/build.yml/badge.svg?branch=LTS)
+![Build Kernel Package - Jammy](https://github.com/t2linux/T2-Ubuntu-Kernel/actions/workflows/kernel-jammy.yml/badge.svg?branch=LTS)
+![Build Kernel Package - Kinetic](https://github.com/t2linux/T2-Ubuntu-Kernel/actions/workflows/kernel-kinetic.yml/badge.svg?branch=LTS)
 
 This project is closely inspired by mikeeq/mbp-fedora-kernel and marcosfad/mbp-ubuntu-kernel. Thank you @mikeeq and @marcosfad for the scripts and setup.
 
