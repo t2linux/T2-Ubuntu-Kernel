@@ -10,7 +10,8 @@ exit 1
 fi
 
 KERNEL_VERSION=6.0.3
-PKGREL=1
+PKGREL=2
+CODENAME=$(lsb_release -c | cut -d ":" -f 2 | xargs)
 
 if [[ $USE_T2LINUX_REPO = true ]]
 then
@@ -116,12 +117,12 @@ make olddefconfig
 echo "" >"${KERNEL_PATH}"/.scmversion
 
 # Build Deb packages
-make -j "$(getconf _NPROCESSORS_ONLN)" deb-pkg LOCALVERSION=-t2 KDEB_PKGVERSION="$(make kernelversion)-$(get_next_version)"
+make -j "$(getconf _NPROCESSORS_ONLN)" deb-pkg LOCALVERSION=-t2-"${CODENAME}" KDEB_PKGVERSION="$(make kernelversion)-$(get_next_version)"
 
 #### Copy artifacts to shared volume
 echo >&2 "===]> Info: Copying debs and calculating SHA256 ... "
 #cp -rfv ../*.deb "${REPO_PATH}/"
 #cp -rfv "${KERNEL_PATH}/.config" "${REPO_PATH}/kernel_config_${KERNEL_VERSION}"
-cp -rfv "${KERNEL_PATH}/.config" "/tmp/artifacts/kernel_config_${KERNEL_VERSION}"
+cp -rfv "${KERNEL_PATH}/.config" "/tmp/artifacts/kernel_config_${KERNEL_VERSION}-${CODENAME}"
 cp -rfv ../*.deb /tmp/artifacts/
-sha256sum ../*.deb >/tmp/artifacts/sha256
+sha256sum ../*.deb >/tmp/artifacts/sha256-"${CODENAME}"
