@@ -47,7 +47,7 @@ jobs:
           REL=$(grep "PKGREL=\d*" build.sh | cut -d = -f2)
           #REL=$( git tag |grep -F $VERSION|sort -r|head -n1|tr -d v)
           echo Building $VERSION-$REL
-          echo "::set-output name=tag::${VERSION}-${REL}"
+          echo "tag=${VERSION}-${REL}" >> $GITHUB_OUTPUT
 
           DOCKER_IMAGE=ubuntu:22.10
           docker pull ${DOCKER_IMAGE}
