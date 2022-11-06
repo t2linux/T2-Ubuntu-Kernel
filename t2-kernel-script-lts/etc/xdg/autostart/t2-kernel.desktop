@@ -1,0 +1,11 @@
+[Desktop Entry]
+Type=Application
+Name=T2 Kernel
+Comment=Checks for new kernel from github repo
+Encoding=UTF-8
+Version=0.1
+Exec=bash -c 'sleep 60;update_t2_kernel -c'
+X-GNOME-Autostart-enabled=true
+StartupNotify=false
+Terminal=false
+Hidden=false

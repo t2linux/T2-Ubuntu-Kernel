@@ -1,7 +1,7 @@
 #!/bin/bash
 #upgrading script apple linux T2 Kernel
 
-if [ $USER != root ]
+if [[ ($USER != root) && ($1 != -c) && ($1 != --check-version) ]]
 then
 sudo chmod 755 $0
 sudo $0 $1
@@ -36,7 +36,14 @@ currentk=$(uname -r)
 currentk_external=$(echo "${currentk}" | cut -d "-" -f 2,3)
 existingK=($(dpkg --list | grep linux-image- | grep 't2\|mbp' | cut -d ' ' -f 2-3 ))
 if [ \( $latestk != $currentk \) ]; then
-	
+
+	if [[ ($1 = -c) || ($1 = --check-version) ]]; then
+		echo "New kernel $latest is available."
+		[ -n "$DISPLAY" ] && [ -x "$(command -v notify-send)" ] && notify-send --icon=info -t 12000 \
+		"New kernel $latest is available." \
+		"Run \'update_t2_kernel\' to upgrade your kernel or visit https://github.com/t2linux/T2-Ubuntu-Kernel/releases/tag/${latest}"
+		exit 0
+	fi
 	echo "Downloading new kernel $latest"
 	echo -e "\nDownloading linux-headers-${latestk}"
 	echo
