@@ -1,0 +1,50 @@
+---
+name: Cron job to update kernel
+
+on:
+  schedule:
+    - cron: '30 18 * * *'
+  workflow_dispatch:
+
+jobs:
+  Publish:
+    runs-on: ubuntu-latest
+    steps:
+
+      - name: 'Checkout Repo'
+        uses: actions/checkout@v3
+        with:
+          persist-credentials: false
+          fetch-depth: 0
+
+      - name: Get the latest driver
+        id: publish
+        run: |
+          LTS_VER=5.15
+          getkernelver=$(curl -sL https://github.com/t2linux/T2-Ubuntu-Kernel/releases | grep "{{ urlEncodedRefName }}" | grep -v "generic" | grep v${LTS_VER} | cut -d "{" -f 3 | cut -c 25- | head -1)
+          latestrelease=$(echo ${getkernelver::-76} | cut -d "v" -f 2 | cut -d "-" -f 1)
+          latestupstream=$(curl -sL https://kernel.org/ | grep ${LTS_VER} | grep tar.xz | cut -d "/" -f 8 | cut -d "\"" -f 1 | cut -d "-" -f 2 | rev | cut -c 8- | rev)
+
+          if [[ ${latestrelease} = ${latestupstream} ]]
+          then
+            echo "publish=no" >> $GITHUB_ENV
+            exit 0
+          else
+            echo "publish=yes" >> $GITHUB_ENV
+            sed -i "s/${latestrelease}/${latestupstream}/g" ${{ github.workspace }}/build.sh
+            echo "ver=${latestupstream}" >> $GITHUB_ENV
+          fi
+      - name: Update the repo
+        if: env.publish == 'yes'
+        id: clean
+        run: |
+          cd ${{ github.workspace }}
+          git config --local user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git config --local user.name "github-actions[bot]"
+          git commit -m "Update kernel to v${{ env.ver }}" -a
+      - name: Push changes to the repo
+        if: env.publish == 'yes'
+        uses: ad-m/github-push-action@master
+        with:
+          github_token: ${{ secrets.PAT }}
+          branch: ${{ github.ref }}
