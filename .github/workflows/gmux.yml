@@ -1,5 +1,5 @@
 ---
-name: APFS driver update script
+name: Apple GMUX driver update script
 
 on:
   schedule:
@@ -25,20 +25,20 @@ jobs:
       - name: Get the latest driver
         id: publish
         run: |
-          source ${{ github.workspace }}/apt-repo/apfs_ver.txt
+          source ${{ github.workspace }}/apt-repo/gmux_ver.txt
 
           echo "currenthash=${CURRENT_HASH}" >> $GITHUB_ENV
           echo "releasever=${RELEASE_VER}" >> $GITHUB_ENV
 
-          git clone --depth 1 https://github.com/linux-apfs/linux-apfs-rw.git
-          cd linux-apfs-rw
+          git clone --depth 1 https://github.com/Redecorating/apple-gmux-t2.git
+          cd apple-gmux-t2
           LATEST_HASH=$(git rev-parse HEAD)
           echo "latesthash=${LATEST_HASH}" >> $GITHUB_ENV
           DKMS_VER=$(cat ./dkms.conf | grep PACKAGE_VERSION | cut -d "\"" -f 2)
           DKMS_NAME=$(cat ./dkms.conf | grep PACKAGE_NAME | cut -d "\"" -f 2)
           rm -r .git
           rm .gitignore
-          rm README.rst
+          rm README.md
 
           if [[ ${CURRENT_HASH} = ${LATEST_HASH} ]]
           then
@@ -53,45 +53,45 @@ jobs:
             else
               RELEASE_VER_SUB=$(echo ${RELEASE_VER} | cut -d "." -f 3)
               NEW_RELEASE_VER_SUB=$((${RELEASE_VER_SUB} + 1))
-              NEW_RELEASE_VER=${DKMS_VER}.${NEW_RELEASE_VER_SUB}  
+              NEW_RELEASE_VER=${DKMS_VER}.${NEW_RELEASE_VER_SUB}
             fi
             echo "ver=${NEW_RELEASE_VER}" >> $GITHUB_ENV
             cd ${{ github.workspace }}
-            mkdir linux-apfs
-            cd linux-apfs
+            mkdir apple-gmux-t2-dkms
+            cd apple-gmux-t2-dkms
             mkdir usr
             cd usr
             mkdir src
             cd src
             mkdir ${DKMS_NAME}-${DKMS_VER}
-            cp ${{ github.workspace }}/linux-apfs-rw/* ${{ github.workspace }}/linux-apfs/usr/src/${DKMS_NAME}-${DKMS_VER}
-            cd ${{ github.workspace }}/linux-apfs
+            cp ${{ github.workspace }}/apple-gmux-t2/* ${{ github.workspace }}/apple-gmux-t2-dkms/usr/src/${DKMS_NAME}-${DKMS_VER}
+            cd ${{ github.workspace }}/apple-gmux-t2-dkms
             mkdir DEBIAN
             cd DEBIAN
 
-            echo "Package: linux-apfs" > control
+            echo "Package: apple-gmux-t2" > control
             echo "Version: ${NEW_RELEASE_VER}" >> control
             echo "Maintainer: Aditya Garg" >> control
             echo "Architecture: amd64" >> control
-            echo "Description: Apple File System driver for Linux" >> control
+            echo "Description: Gmux driver for Apple laptops" >> control
             echo "Depends: dkms" >> control
 
-            echo "dkms add -m linux-apfs-rw -v ${DKMS_VER}" > postinst
-            echo "dkms build -m linux-apfs-rw -v ${DKMS_VER} && dkms install -m linux-apfs-rw -v ${DKMS_VER} || true" >> postinst
+            echo "dkms add -m apple-gmux -v ${DKMS_VER}" > postinst
+            echo "dkms build -m apple-gmux -v ${DKMS_VER} && dkms install -m apple-gmux -v ${DKMS_VER} || true" >> postinst
 
-            echo "dkms remove -m linux-apfs-rw -v ${DKMS_VER} --all || true" > prerm
+            echo "dkms remove -m apple-gmux -v ${DKMS_VER} --all || true" > prerm
 
             chmod 755 ./postinst
             chmod 755 ./prerm
 
             cd ${{ github.workspace }}
-            dpkg-deb --build --root-owner-group linux-apfs
+            dpkg-deb --build --root-owner-group apple-gmux-t2-dkms
  
             git clone https://github.com/AdityaGarg8/t2-ubuntu-repo.git
-            mv ${{ github.workspace }}/linux-apfs.deb ${{ github.workspace }}/t2-ubuntu-repo
+            mv ${{ github.workspace }}/apple-gmux-t2-dkms.deb ${{ github.workspace }}/t2-ubuntu-repo
             cd ${{ github.workspace }}/t2-ubuntu-repo
             # Packages & Packages.gz
-            dpkg-name ./linux-apfs.deb
+            dpkg-name ./apple-gmux-t2-dkms.deb
             dpkg-scanpackages --multiversion . > Packages
             gzip -k -f Packages
             # Release, Release.gpg & InRelease
@@ -114,20 +114,20 @@ jobs:
           user-email: github-actions[bot]@users.noreply.github.com
           user-name: github-actions[bot]
           target-branch: main
-          commit-message: Update APFS driver to v${{ env.ver }}
+          commit-message: Update Gmux driver to v${{ env.ver }}
       - name: Cleanup and update the repo
         if: env.publish == 'yes'
         id: clean
         run: |
           cd ${{ github.workspace }}
-          rm -r linux-apfs-rw
-          rm -r linux-apfs
+          rm -r apple-gmux-t2-dkms
+          rm -r apple-gmux-t2
           rm -r t2-ubuntu-repo
-          sed -i "s/${{ env.releasever }}/${{ env.ver }}/g" ${{ github.workspace }}/apt-repo/apfs_ver.txt
-          sed -i "s/${{ env.currenthash }}/${{ env.latesthash }}/g" ${{ github.workspace }}/apt-repo/apfs_ver.txt
+          sed -i "s/${{ env.releasever }}/${{ env.ver }}/g" ${{ github.workspace }}/apt-repo/gmux_ver.txt
+          sed -i "s/${{ env.currenthash }}/${{ env.latesthash }}/g" ${{ github.workspace }}/apt-repo/gmux_ver.txt
           git config --local user.email "41898282+github-actions[bot]@users.noreply.github.com"
           git config --local user.name "github-actions[bot]"
-          git commit -m "Update APFS driver to v${{ env.ver }}" -a
+          git commit -m "Update Gmux driver to v${{ env.ver }}" -a
       - name: Push changes to the repo
         if: env.publish == 'yes'
         uses: ad-m/github-push-action@master
