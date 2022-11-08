@@ -3,7 +3,7 @@ name: Cron job to update kernel
 
 on:
   schedule:
-    - cron: '30 18 * * *'
+    - cron: '0 */8 * * *'
   workflow_dispatch:
 
 jobs:
