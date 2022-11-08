@@ -22,7 +22,7 @@ KERNEL_REPOSITORY=https://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-s
 fi
 
 APPLE_BCE_REPOSITORY=https://github.com/kekrby/apple-bce.git
-#APPLE_IBRIDGE_REPOSITORY=https://github.com/Redecorating/apple-ib-drv.git
+APPLE_IBRIDGE_REPOSITORY=https://github.com/Redecorating/apple-ib-drv.git
 REPO_PATH=$(pwd)
 WORKING_PATH=/root/work
 KERNEL_PATH="${WORKING_PATH}/linux-kernel"
@@ -63,7 +63,7 @@ git clone --depth 1 --single-branch --branch "v${KERNEL_VERSION}" \
   "${KERNEL_REPOSITORY}" "${KERNEL_PATH}"
 fi
 git clone --depth 1 "${APPLE_BCE_REPOSITORY}" "${KERNEL_PATH}/drivers/staging/apple-bce"
-#git clone --depth 1 "${APPLE_IBRIDGE_REPOSITORY}" "${KERNEL_PATH}/drivers/staging/apple-ibridge"
+git clone --depth 1 "${APPLE_IBRIDGE_REPOSITORY}" "${KERNEL_PATH}/drivers/staging/apple-ibridge"
 cd "${KERNEL_PATH}" || exit
 
 if [[ $USE_T2LINUX_REPO = false ]]
