@@ -5,7 +5,7 @@ set -eu -o pipefail
 BUILD_PATH=/tmp/build-kernel
 
 # Patches
-APPLE_SMC_DRIVER_GIT_URL=https://github.com/AdityaGarg8/linux-t2-patches.git
+APPLE_SMC_DRIVER_GIT_URL=https://github.com/t2linux/linux-t2-patches.git
 APPLE_SMC_DRIVER_BRANCH_NAME=5.15
 APPLE_SMC_DRIVER_COMMIT_HASH=404ec2beb452322b4a4380e1de2167cab4221cf8
 
