@@ -9,6 +9,13 @@ echo "Abort!"
 exit 1
 fi
 
+### Environment variable
+export DEBIAN_FRONTEND=noninteractive
+
+### Dependencies in docker
+apt-get update
+apt-get install -y lsb-release
+
 KERNEL_VERSION=5.15.78
 PKGREL=1
 CODENAME=$(lsb_release -c | cut -d ":" -f 2 | xargs)
@@ -47,8 +54,6 @@ cp -rf "${REPO_PATH}"/{patches,templates} "${WORKING_PATH}"
 rm -rf "${KERNEL_PATH}"
 
 ### Dependencies
-export DEBIAN_FRONTEND=noninteractive
-apt-get update
 apt-get install -y build-essential fakeroot libncurses-dev bison flex libssl-dev libelf-dev \
   openssl dkms libudev-dev libpci-dev libiberty-dev autoconf wget xz-utils git \
   libcap-dev bc rsync cpio dh-modaliases debhelper kernel-wedge curl gawk dwarves zstd
