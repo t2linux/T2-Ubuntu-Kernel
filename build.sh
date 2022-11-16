@@ -16,7 +16,7 @@ export DEBIAN_FRONTEND=noninteractive
 apt-get update
 apt-get install -y lsb-release
 
-KERNEL_VERSION=5.15.78
+KERNEL_VERSION=5.15.79
 PKGREL=1
 CODENAME=$(lsb_release -c | cut -d ":" -f 2 | xargs)
 
@@ -29,7 +29,6 @@ KERNEL_REPOSITORY=https://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-s
 fi
 
 APPLE_BCE_REPOSITORY=https://github.com/kekrby/apple-bce.git
-APPLE_IBRIDGE_REPOSITORY=https://github.com/Redecorating/apple-ib-drv.git
 REPO_PATH=$(pwd)
 WORKING_PATH=/root/work
 KERNEL_PATH="${WORKING_PATH}/linux-kernel"
@@ -68,7 +67,6 @@ git clone --depth 1 --single-branch --branch "v${KERNEL_VERSION}" \
   "${KERNEL_REPOSITORY}" "${KERNEL_PATH}"
 fi
 git clone --depth 1 "${APPLE_BCE_REPOSITORY}" "${KERNEL_PATH}/drivers/staging/apple-bce"
-git clone --depth 1 "${APPLE_IBRIDGE_REPOSITORY}" "${KERNEL_PATH}/drivers/staging/apple-ibridge"
 cd "${KERNEL_PATH}" || exit
 
 if [[ $USE_T2LINUX_REPO = false ]]
@@ -116,7 +114,9 @@ sed -i 's/CONFIG_MESSAGE_LOGLEVEL_DEFAULT=.*/CONFIG_MESSAGE_LOGLEVEL_DEFAULT=4/g
 # Copy the modified config
 cp "${WORKING_PATH}/templates/default-config" "${KERNEL_PATH}/.config"
 make olddefconfig
-#./scripts/config --module CONFIG_BT_HCIBCM4377
+./scripts/config --module CONFIG_HID_APPLE_IBRIDGE
+./scripts/config --module CONFIG_HID_APPLE_TOUCHBAR
+./scripts/config --module CONFIG_HID_APPLE_MAGIC_BACKLIGHT
 
 # Get rid of the dirty tag
 echo "" >"${KERNEL_PATH}"/.scmversion
