@@ -1,1 +1,2 @@
 chmod 755 /usr/bin/update_t2_kernel
+chmod 755 /lib/systemd/system-sleep/rmmod_tb.sh
