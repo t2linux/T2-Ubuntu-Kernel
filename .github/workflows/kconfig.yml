@@ -1,4 +1,4 @@
-name: Get 5.19 Kernel config
+name: Get Kernel config
 on:
   workflow_dispatch:
 jobs:
@@ -10,7 +10,7 @@ jobs:
 
       - name: Get kconfig
         run: |
-          DOCKER_IMAGE=ubuntu:22.10
+          DOCKER_IMAGE=ubuntu:22.04
           docker pull ${DOCKER_IMAGE}
           docker run \
           -t \
@@ -18,7 +18,11 @@ jobs:
           ${DOCKER_IMAGE} \
           /bin/bash -c 'cd /repo && \
           apt update && \
-          apt install linux-generic -y && \
+          apt install linux-generic wget -y && \
+          wget https://raw.githubusercontent.com/pimlie/ubuntu-mainline-kernel.sh/master/ubuntu-mainline-kernel.sh && \
+          chmod +x ubuntu-mainline-kernel.sh && \
+          mv ubuntu-mainline-kernel.sh /usr/local/bin/ && \
+          ubuntu-mainline-kernel.sh -i --yes
           cp -r /boot/config* /repo'
           mkdir /tmp/artifacts
           cp -r "$(pwd)"/* /tmp/artifacts
