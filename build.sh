@@ -17,7 +17,7 @@ apt-get update
 apt-get install -y lsb-release
 
 KERNEL_VERSION=5.15.79
-PKGREL=2
+PKGREL=1
 CODENAME=$(lsb_release -c | cut -d ":" -f 2 | xargs)
 
 if [[ $USE_T2LINUX_REPO = true ]]
