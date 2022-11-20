@@ -10,22 +10,14 @@ jobs:
 
       - name: Get kconfig
         run: |
-          DOCKER_IMAGE=ubuntu:22.04
-          docker pull ${DOCKER_IMAGE}
-          docker run \
-          -t \
-          -v "$(pwd)":/repo \
-          ${DOCKER_IMAGE} \
-          /bin/bash -c 'cd /repo && \
-          apt update && \
-          apt install linux-generic wget -y && \
-          wget https://raw.githubusercontent.com/pimlie/ubuntu-mainline-kernel.sh/master/ubuntu-mainline-kernel.sh && \
-          chmod +x ubuntu-mainline-kernel.sh && \
-          mv ubuntu-mainline-kernel.sh /usr/local/bin/ && \
-          ubuntu-mainline-kernel.sh -i --yes
-          cp -r /boot/config* /repo'
+          sudo apt update
+          sudo apt install linux-generic
+          wget https://raw.githubusercontent.com/pimlie/ubuntu-mainline-kernel.sh/master/ubuntu-mainline-kernel.sh
+          chmod +x ubuntu-mainline-kernel.sh
+          sudo mv ubuntu-mainline-kernel.sh /usr/local/bin/
+          sudo ubuntu-mainline-kernel.sh -i --yes
           mkdir /tmp/artifacts
-          cp -r "$(pwd)"/* /tmp/artifacts
+          cp -r /boot/config* /tmp/artifacts
       - name: Upload package artifact
         uses: actions/upload-artifact@v2
         with:
