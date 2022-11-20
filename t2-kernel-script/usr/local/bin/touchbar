@@ -9,22 +9,14 @@ echo "1: Show media and brightness controls, use the fn key to switch to F1-F12"
 echo "2: Show F1-F12, use the fn key to switch to media and brightness controls"
 echo "3: Only show media and brightness controls"
 echo "4: Only show the escape key"
-echo "5: Disable the touchbar"
 read tb
-if [[ $tb != 0 && $tb != 1 && $tb != 2 && $tb != 3 && $tb != 4 && $tb != 5 ]]
+if [[ $tb != 0 && $tb != 1 && $tb != 2 && $tb != 3 && $tb != 4 ]]
 then
 echo "Invalid input. Aborting!"
 exit 1
 fi
-if [[ $tb = 5 ]]
-then
-echo "Disabling the touchbar ..."
-modprobe -r apple-touchbar
-echo "blacklist apple-touchbar" > /etc/modprobe.d/apple-tb.conf
-else
 echo "Changing default mode ..."
 echo "# display f* key in touchbar" > /etc/modprobe.d/apple-tb.conf
 echo "options apple-touchbar fnmode=$tb" >> /etc/modprobe.d/apple-tb.conf
 bash -c "echo $tb > /sys/class/input/*/device/fnmode"
-fi
 echo "Done!"
