@@ -56,9 +56,7 @@ if [ \( $latestk != $currentk \) ]; then
 		#install
 		echo -e "\nInstalling new kernel $latest"
 		echo
-		apt install ./headers.deb
-		echo
-		apt install ./image.deb
+		apt install ./headers.deb ./image.deb
 		#shutdown -r 02:00 "reboot scheduled for the next 2am to update runnning kernel"
 		rm -f headers.deb image.deb
 
@@ -70,17 +68,13 @@ if [ \( $latestk != $currentk \) ]; then
 				version=${kernel/#linux-image-}
 				#purge old t2 kernel
 				echo
-				dpkg -P linux-headers-$version
-				echo
-				dpkg -P linux-image-$version
+				dpkg -P linux-headers-$version linux-image-$version
 			fi
 		done
 		if [[ ($1 = --remove-current) || (${currentk_external} = t2-external) ]]; then
 			echo -e "\nCurrent kernel linux-image-$currentk shall also be removed"
 			echo
-			dpkg -P linux-headers-$currentk
-			echo
-			dpkg -P linux-image-$currentk
+			dpkg -P linux-headers-$currentk linux-image-$currentk
 		fi
 	fi
 else
