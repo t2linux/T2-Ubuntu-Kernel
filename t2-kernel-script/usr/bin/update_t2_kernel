@@ -14,6 +14,18 @@ cd /tmp
 
 use_lts=false
 lts_version=5.15
+CODENAME=$(lsb_release -c | cut -d ":" -f 2 | xargs)
+
+# Linux Mint support
+if [[ (${CODENAME} = ulyana) || (${CODENAME} = ulyssa) || (${CODENAME} = uma) || (${CODENAME} = una) ]]
+then
+EFFECTIVE_CODENAME=focal
+elif [[ (${CODENAME} = vanessa) || (${CODENAME} = vera) ]]
+then
+EFFECTIVE_CODENAME=jammy
+else
+EFFECTIVE_CODENAME=${CODENAME}
+fi
 
 if [[ $use_lts != true ]]
 then
@@ -26,10 +38,10 @@ fi
 if [[ (${#latest} = 6) || (${#latest} = 7) ]]
 then
 latestkver=$(echo $latest | cut -d "v" -f 2 | cut -d "-" -f 1 | awk '{print $1".0-1"}')
-latestk=$(echo $latest | cut -c 2- | cut -d "-" -f 1 | awk '{print $1".0-t2"}')-$(lsb_release -c | cut -d ":" -f 2 | xargs)
+latestk=$(echo $latest | cut -c 2- | cut -d "-" -f 1 | awk '{print $1".0-t2"}')-${EFFECTIVE_CODENAME}
 else
 latestkver=$(echo $latest | cut -d "v" -f 2)
-latestk=$(echo $latest | cut -c 2- | cut -d "-" -f 1 | awk '{print $1"-t2"}')-$(lsb_release -c | cut -d ":" -f 2 | xargs)
+latestk=$(echo $latest | cut -c 2- | cut -d "-" -f 1 | awk '{print $1"-t2"}')-${EFFECTIVE_CODENAME}
 fi
 
 currentk=$(uname -r)
