@@ -15,7 +15,25 @@ jobs:
           wget https://raw.githubusercontent.com/pimlie/ubuntu-mainline-kernel.sh/master/ubuntu-mainline-kernel.sh
           chmod +x ubuntu-mainline-kernel.sh
           sudo mv ubuntu-mainline-kernel.sh /usr/local/bin/
-          sudo ubuntu-mainline-kernel.sh -i --yes
+          latestupstream=$(curl -sL https://kernel.org/ | grep "latest_button" -A 1 | awk "NR==2" | cut -d "/" -f 8 | cut -d "\"" -f 1 | cut -d "-" -f 2 | rev | cut -c 8- | rev)
+          sudo ubuntu-mainline-kernel.sh -i --yes ||
+          (sub=$(echo ${latestupstream} | cut -d "." -f 3) &&
+          main=$(echo ${latestupstream} | cut -d "." -f 1,2) &&
+          newsub=$((${sub} - 1)) &&
+          newlatest=${main}.${newsub} &&
+          sudo sed -i "s/version=.*/version=v${newlatest}/g" /usr/local/bin/ubuntu-mainline-kernel.sh &&
+          sudo ubuntu-mainline-kernel.sh -i --yes)
+
+          LTS_VER=5.15
+          latestupstream=$(curl -sL https://kernel.org/ | grep ${LTS_VER} | grep tar.xz | cut -d "/" -f 8 | cut -d "\"" -f 1 | cut -d "-" -f 2 | rev | cut -c 8- | rev)
+          sudo sed -i "s/version=.*/version=v${latestupstream}/g" /usr/local/bin/ubuntu-mainline-kernel.sh
+          sudo ubuntu-mainline-kernel.sh -i --yes ||
+          (sub=$(echo ${latestupstream} | cut -d "." -f 3) &&
+          main=$(echo ${latestupstream} | cut -d "." -f 1,2) &&
+          newsub=$((${sub} - 1)) &&
+          newlatest=${main}.${newsub} &&
+          sudo sed -i "s/version=.*/version=v${newlatest}/g" /usr/local/bin/ubuntu-mainline-kernel.sh &&
+          sudo ubuntu-mainline-kernel.sh -i --yes)
           mkdir /tmp/artifacts
           cp -r /boot/config* /tmp/artifacts
       - name: Upload package artifact
