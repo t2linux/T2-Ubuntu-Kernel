@@ -30,6 +30,7 @@ jobs:
           else
             echo "publish=yes" >> $GITHUB_ENV
             sed -i "s/${latestrelease}/${latestupstream}/g" ${{ github.workspace }}/build.sh
+            sed -i "s/PKGREL=.*/PKGREL=1/g" ${{ github.workspace }}/build.sh
             echo "ver=${latestupstream}" >> $GITHUB_ENV
           fi
       - name: Update the repo
@@ -71,6 +72,7 @@ jobs:
           else
             echo "publish=yes" >> $GITHUB_ENV
             sed -i "s/${latestrelease}/${latestupstream}/g" ${{ github.workspace }}/build.sh
+            sed -i "s/PKGREL=.*/PKGREL=1/g" ${{ github.workspace }}/build.sh
             echo "ver=${latestupstream}" >> $GITHUB_ENV
           fi
       - name: Update the repo
