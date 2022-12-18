@@ -13,14 +13,12 @@ set -e
 cd /tmp
 
 latest=$(curl -sL https://github.com/andersfugmann/T2-Debian-Kernel/releases/latest/ | grep "<title>Release" | awk -F " " '{print $2}' )
+latestkver=$(echo $latest | cut -d "v" -f 2)
 
 if [[ (${#latest} = 6) || (${#latest} = 7) ]]
 then
-pkgrel=$(echo $latest | cut -d "-" -f 2)
-latestkver=$(echo $latest | cut -d "v" -f 2 | cut -d "-" -f 1 | awk '{print $1".0"}')-${pkgrel}
 latestk=$(echo $latest | cut -c 2- | cut -d "-" -f 1 | awk '{print $1".0-t2"}')
 else
-latestkver=$(echo $latest | cut -d "v" -f 2)
 latestk=$(echo $latest | cut -c 2- | cut -d "-" -f 1 | awk '{print $1"-t2"}')
 fi
 
