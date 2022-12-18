@@ -16,7 +16,8 @@ latest=$(curl -sL https://github.com/andersfugmann/T2-Debian-Kernel/releases/lat
 
 if [[ (${#latest} = 6) || (${#latest} = 7) ]]
 then
-latestkver=$(echo $latest | cut -d "v" -f 2 | cut -d "-" -f 1 | awk '{print $1".0-1"}')
+pkgrel=$(echo $latest | cut -d "-" -f 2)
+latestkver=$(echo $latest | cut -d "v" -f 2 | cut -d "-" -f 1 | awk '{print $1".0"}')-${pkgrel}
 latestk=$(echo $latest | cut -c 2- | cut -d "-" -f 1 | awk '{print $1".0-t2"}')
 else
 latestkver=$(echo $latest | cut -d "v" -f 2)
