@@ -85,7 +85,7 @@ jobs:
             chmod 755 ./prerm
 
             cd ${{ github.workspace }}
-            dpkg-deb --build --root-owner-group apple-gmux-t2-dkms
+            dpkg-deb --build --root-owner-group -Zgzip apple-gmux-t2-dkms
  
             git clone https://github.com/AdityaGarg8/t2-ubuntu-repo.git
             mv ${{ github.workspace }}/apple-gmux-t2-dkms.deb ${{ github.workspace }}/t2-ubuntu-repo
