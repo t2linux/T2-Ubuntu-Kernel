@@ -1,6 +1,7 @@
 Package: t2-kernel-script-debian
-Version: 1.2.5
+Version: 1.3
 Maintainer: Aditya Garg
 Architecture: amd64
 Description: Kernel upgrade script for Debian kernels
+Depends: curl
 Replaces: t2-kernel-script, t2-kernel-script-lts

@@ -1,6 +1,7 @@
 Package: t2-kernel-script
-Version: 7.2.1
+Version: 7.3
 Maintainer: Aditya Garg
 Architecture: amd64
 Description: Kernel upgrade script for Mainline kernels
+Depends: curl
 Replaces: t2-kernel-script-lts, t2-kernel-script-debian

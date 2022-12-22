@@ -37,8 +37,7 @@ fi
 
 if [[ (${#latest} = 6) || (${#latest} = 7) ]]
 then
-pkgrel=$(echo $latest | cut -d "-" -f 2)
-latestkver=$(echo $latest | cut -d "v" -f 2 | cut -d "-" -f 1 | awk '{print $1".0"}')-${pkgrel}
+latestkver=$(echo $latest | cut -d "v" -f 2 | cut -d "-" -f 1 | awk '{print $1".0-1"}')
 latestk=$(echo $latest | cut -c 2- | cut -d "-" -f 1 | awk '{print $1".0-t2"}')-${EFFECTIVE_CODENAME}
 else
 latestkver=$(echo $latest | cut -d "v" -f 2)
@@ -65,8 +64,27 @@ if [ \( $latestk != $currentk \) ]; then
 	echo
 	curl -#L https://github.com/t2linux/T2-Ubuntu-Kernel/releases/download/${latest}/linux-image-${latestk}_${latestkver}_amd64.deb > image.deb
 
-	if [ -f headers.deb -a -f image.deb ]; then
+	echo -e "\nVerifying checksums"
+	curl -sL https://github.com/t2linux/T2-Ubuntu-Kernel/releases/download/${latest}/sha256-${EFFECTIVE_CODENAME} > sha
+
+	actual_headers_chksum=$(cat ./sha | grep linux-headers-${latestk}_${latestkver}_amd64.deb | cut -d " " -f 1)
+	actual_image_chksum=$(cat ./sha | grep linux-image-${latestk}_${latestkver}_amd64.deb | cut -d " " -f 1)
+	downloaded_headers_chksum=$(sha256sum ./headers.deb | cut -d " " -f 1)
+	downloaded_image_chksum=$(sha256sum ./image.deb | cut -d " " -f 1)
+
+	if [[ ${actual_headers_chksum} != ${downloaded_headers_chksum} ]]
+	then
+	echo -e "\nError: Failed to verify checksum of linux-headers-${latestk}"
+	fi
+
+	if [[ ${actual_image_chksum} != ${downloaded_image_chksum} ]]
+	then
+	echo -e "\nError: Failed to verify checksum of linux-image-${latestk}"
+	fi
+
+	if [[ (${actual_headers_chksum} = ${downloaded_headers_chksum}) && (${actual_image_chksum} = ${downloaded_image_chksum}) ]]; then
 		#install
+		echo -e "\nChecksums successfully verified"
 		echo -e "\nInstalling new kernel $latest"
 		echo
 		apt install ./headers.deb ./image.deb
@@ -89,6 +107,8 @@ if [ \( $latestk != $currentk \) ]; then
 			echo
 			dpkg -P linux-headers-$currentk linux-image-$currentk
 		fi
+	else
+	exit 1
 	fi
 else
 echo "Kernel is up to date"
