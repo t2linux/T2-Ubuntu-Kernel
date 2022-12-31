@@ -1,0 +1,78 @@
+From 9f2b5debc07073e6dfdd774e3594d0224b991927 Mon Sep 17 00:00:00 2001
+From: Aditya Garg <gargaditya08@live.com>
+Date: Wed, 7 Dec 2022 03:05:40 +0000
+Subject: hfsplus: fix bug causing custom uid and gid being unable to be
+ assigned with mount
+
+Despite specifying UID and GID in mount command, the specified UID and GID
+were not being assigned. This patch fixes this issue.
+
+Link: https://lkml.kernel.org/r/C0264BF5-059C-45CF-B8DA-3A3BD2C803A2@live.com
+Signed-off-by: Aditya Garg <gargaditya08@live.com>
+Reviewed-by: Viacheslav Dubeyko <slava@dubeyko.com>
+Cc: <stable@vger.kernel.org>
+Signed-off-by: Andrew Morton <akpm@linux-foundation.org>
+---
+ fs/hfsplus/hfsplus_fs.h | 2 ++
+ fs/hfsplus/inode.c      | 4 ++--
+ fs/hfsplus/options.c    | 4 ++++
+ 3 files changed, 8 insertions(+), 2 deletions(-)
+
+(limited to 'fs/hfsplus')
+
+diff --git a/fs/hfsplus/hfsplus_fs.h b/fs/hfsplus/hfsplus_fs.h
+index a5db2e3b29801..6aa919e594834 100644
+--- a/fs/hfsplus/hfsplus_fs.h
++++ b/fs/hfsplus/hfsplus_fs.h
+@@ -198,6 +198,8 @@ struct hfsplus_sb_info {
+ #define HFSPLUS_SB_HFSX		3
+ #define HFSPLUS_SB_CASEFOLD	4
+ #define HFSPLUS_SB_NOBARRIER	5
++#define HFSPLUS_SB_UID		6
++#define HFSPLUS_SB_GID		7
+ 
+ static inline struct hfsplus_sb_info *HFSPLUS_SB(struct super_block *sb)
+ {
+diff --git a/fs/hfsplus/inode.c b/fs/hfsplus/inode.c
+index aeab83ed1c9c6..b675581aa9d0f 100644
+--- a/fs/hfsplus/inode.c
++++ b/fs/hfsplus/inode.c
+@@ -192,11 +192,11 @@ static void hfsplus_get_perms(struct inode *inode,
+ 	mode = be16_to_cpu(perms->mode);
+ 
+ 	i_uid_write(inode, be32_to_cpu(perms->owner));
+-	if (!i_uid_read(inode) && !mode)
++	if ((test_bit(HFSPLUS_SB_UID, &sbi->flags)) || (!i_uid_read(inode) && !mode))
+ 		inode->i_uid = sbi->uid;
+ 
+ 	i_gid_write(inode, be32_to_cpu(perms->group));
+-	if (!i_gid_read(inode) && !mode)
++	if ((test_bit(HFSPLUS_SB_GID, &sbi->flags)) || (!i_gid_read(inode) && !mode))
+ 		inode->i_gid = sbi->gid;
+ 
+ 	if (dir) {
+diff --git a/fs/hfsplus/options.c b/fs/hfsplus/options.c
+index 047e05c575601..c94a58762ad6d 100644
+--- a/fs/hfsplus/options.c
++++ b/fs/hfsplus/options.c
+@@ -140,6 +140,8 @@ int hfsplus_parse_options(char *input, struct hfsplus_sb_info *sbi)
+ 			if (!uid_valid(sbi->uid)) {
+ 				pr_err("invalid uid specified\n");
+ 				return 0;
++			} else {
++				set_bit(HFSPLUS_SB_UID, &sbi->flags);
+ 			}
+ 			break;
+ 		case opt_gid:
+@@ -151,6 +153,8 @@ int hfsplus_parse_options(char *input, struct hfsplus_sb_info *sbi)
+ 			if (!gid_valid(sbi->gid)) {
+ 				pr_err("invalid gid specified\n");
+ 				return 0;
++			} else {
++				set_bit(HFSPLUS_SB_GID, &sbi->flags);
+ 			}
+ 			break;
+ 		case opt_part:
+-- 
+cgit 
+
