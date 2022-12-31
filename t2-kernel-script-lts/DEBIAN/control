@@ -1,7 +1,7 @@
 Package: t2-kernel-script-lts
-Version: 4.3
+Version: 4.4
 Maintainer: Aditya Garg
 Architecture: amd64
 Description: Kernel upgrade script for LTS kernels
-Depends: curl
+Depends: curl, wget
 Replaces: t2-kernel-script, t2-kernel-script-debian

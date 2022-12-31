@@ -8,6 +8,15 @@ sudo $0 $1
 exit 0
 fi
 
+wget -q --spider http://github.com
+
+if [ $? -eq 0 ]; then
+    true
+else
+    echo "Please connect to the internet"
+    exit 1
+fi
+
 set -e
 
 cd /tmp
