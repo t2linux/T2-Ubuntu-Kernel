@@ -57,7 +57,7 @@ fi
 currentk=$(uname -r)
 currentk_external=$(echo "${currentk}" | cut -d "-" -f 2,3)
 existingK=($(dpkg --list | grep linux-image- | grep 't2\|mbp' | cut -d ' ' -f 2-3 ))
-if [[ ( $latestk != $currentk ) && ( $(echo ${latestk} | cut -d "." -f 1,2) != $lts_version ) ]]; then
+if [[ ( $latestk != $currentk ) && (( $(echo ${latestk} | cut -d "." -f 1,2) != $lts_version ) && ( ${use_lts} != true )) ]]; then
 
 	if [[ ($1 = -c) || ($1 = --check-version) ]]; then
 		echo "New kernel $latest is available."
