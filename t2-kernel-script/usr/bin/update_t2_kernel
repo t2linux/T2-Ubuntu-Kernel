@@ -55,9 +55,9 @@ latestk=$(echo $latest | cut -c 2- | cut -d "-" -f 1 | awk '{print $1"-t2"}')-${
 fi
 
 currentk=$(uname -r)
-currentk_external=$(echo "${currentk}" | cut -d "-" -f 2,3)
+currentkver=$(apt show linux-image-${currentk} 2>/dev/null | grep Version | cut -d ":" -f 2 | xargs)
 existingK=($(dpkg --list | grep linux-image- | grep 't2\|mbp' | cut -d ' ' -f 2-3 ))
-if [[ ( $latestk != $currentk ) && (( $(echo ${latestk} | cut -d "." -f 1,2) != $lts_version ) || ( ${use_lts} = true )) ]]; then
+if [[ ( $latestkver != $currentkver ) && (( $(echo ${latestk} | cut -d "." -f 1,2) != $lts_version ) || ( ${use_lts} = true )) ]]; then
 
 	if [[ ($1 = -c) || ($1 = --check-version) ]]; then
 		echo "New kernel $latest is available."
@@ -102,17 +102,20 @@ if [[ ( $latestk != $currentk ) && (( $(echo ${latestk} | cut -d "." -f 1,2) != 
 		rm -f headers.deb image.deb
 
 		#uninstall old t2 kernels but preserve current version as a backup
-		for kernel in "${existingK[@]}"
-		do
-			if [ \( $kernel != linux-image-$currentk \) ]; then
-				echo -e "\n$kernel needs to be removed"
-				version=${kernel/#linux-image-}
-				#purge old t2 kernel
-				echo
-				dpkg -P linux-headers-$version linux-image-$version
-			fi
-		done
-		if [[ ($1 = --remove-current) || (${currentk_external} = t2-external) ]]; then
+		if [[ ( $latestk != $currentk ) ]]; then
+			for kernel in "${existingK[@]}"
+			do
+				if [ \( $kernel != linux-image-$currentk \) ]; then
+					echo -e "\n$kernel needs to be removed"
+					version=${kernel/#linux-image-}
+					#purge old t2 kernel
+					echo
+					dpkg -P linux-headers-$version linux-image-$version
+				fi
+			done
+		fi
+
+		if [[ ($1 = --remove-current) ]]; then
 			echo -e "\nCurrent kernel linux-image-$currentk shall also be removed"
 			echo
 			dpkg -P linux-headers-$currentk linux-image-$currentk
