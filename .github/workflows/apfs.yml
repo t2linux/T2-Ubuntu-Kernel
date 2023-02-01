@@ -64,7 +64,7 @@ jobs:
             mkdir src
             cd src
             mkdir ${DKMS_NAME}-${DKMS_VER}
-            cp ${{ github.workspace }}/linux-apfs-rw/* ${{ github.workspace }}/linux-apfs/usr/src/${DKMS_NAME}-${DKMS_VER}
+            cp -r ${{ github.workspace }}/linux-apfs-rw/* ${{ github.workspace }}/linux-apfs/usr/src/${DKMS_NAME}-${DKMS_VER}
             cd ${{ github.workspace }}/linux-apfs
             mkdir DEBIAN
             cd DEBIAN
