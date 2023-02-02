@@ -1,5 +1,5 @@
 Package: t2-kernel-script-lts
-Version: 4.5
+Version: 4.5.1
 Maintainer: Aditya Garg
 Architecture: amd64
 Description: Kernel upgrade script for LTS kernels
