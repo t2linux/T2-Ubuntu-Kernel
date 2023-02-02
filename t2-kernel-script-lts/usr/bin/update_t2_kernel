@@ -25,13 +25,20 @@ use_lts=true
 lts_version=5.15
 CODENAME=$(lsb_release -c | cut -d ":" -f 2 | xargs)
 
-# Linux Mint support
+# Linux Mint
 if [[ (${CODENAME} = ulyana) || (${CODENAME} = ulyssa) || (${CODENAME} = uma) || (${CODENAME} = una) ]]
 then
 EFFECTIVE_CODENAME=focal
 elif [[ (${CODENAME} = vanessa) || (${CODENAME} = vera) ]]
 then
 EFFECTIVE_CODENAME=jammy
+
+# Elementary OS
+elif [[ (${CODENAME} = horus) ]]
+then
+EFFECTIVE_CODENAME=jammy
+
+# Default
 else
 EFFECTIVE_CODENAME=${CODENAME}
 fi
