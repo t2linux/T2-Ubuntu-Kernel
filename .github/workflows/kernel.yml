@@ -29,6 +29,14 @@ jobs:
     needs: [Lint]
     runs-on: ubuntu-20.04
     steps:
+
+      - name: Free up disk space for the CI
+        uses: AdityaGarg8/remove-unwanted-software@v1
+        with:
+          remove-android: 'true'
+          remove-dotnet: 'true'
+          remove-haskell: 'true'
+
       - name: 'Checkout Repo'
         uses: actions/checkout@v3
 
@@ -70,6 +78,14 @@ jobs:
     needs: [Lint]
     runs-on: ubuntu-22.04
     steps:
+
+      - name: Free up disk space for the CI
+        uses: AdityaGarg8/remove-unwanted-software@v1
+        with:
+          remove-android: 'true'
+          remove-dotnet: 'true'
+          remove-haskell: 'true'
+
       - name: 'Checkout Repo'
         uses: actions/checkout@v3
 
@@ -113,6 +129,14 @@ jobs:
     needs: [Lint]
     runs-on: ubuntu-22.04
     steps:
+
+      - name: Free up disk space for the CI
+        uses: AdityaGarg8/remove-unwanted-software@v1
+        with:
+          remove-android: 'true'
+          remove-dotnet: 'true'
+          remove-haskell: 'true'
+
       - name: 'Checkout Repo'
         uses: actions/checkout@v3
 
