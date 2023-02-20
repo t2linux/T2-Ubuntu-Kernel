@@ -74,7 +74,7 @@ jobs:
       - name: Upload package artifact
         uses: actions/upload-artifact@v2
         with:
-          name: linux-T2-${{ steps.build.outputs.tag }}-kinetic
+          name: linux-T2-${{ steps.build.outputs.tag }}-focal
           path: /tmp/artifacts/*
 
       - name: Release
