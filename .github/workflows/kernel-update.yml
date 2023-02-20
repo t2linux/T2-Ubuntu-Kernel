@@ -61,7 +61,7 @@ jobs:
       - name: Get the latest driver
         id: publish
         run: |
-          LTS_VER=5.15
+          LTS_VER=6.1
           latestrelease=$(grep ^KERNEL_VERSION build.sh | head -n1| cut -d = -f2)
           latestupstream=$(curl -sL https://kernel.org/ | grep ${LTS_VER} | grep tar.xz | cut -d "/" -f 8 | cut -d "\"" -f 1 | cut -d "-" -f 2 | rev | cut -c 8- | rev)
 
