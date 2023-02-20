@@ -11,7 +11,6 @@ jobs:
       - name: Get kconfig
         run: |
           sudo apt update
-          sudo apt install linux-generic -y
           wget https://raw.githubusercontent.com/pimlie/ubuntu-mainline-kernel.sh/master/ubuntu-mainline-kernel.sh
           chmod +x ubuntu-mainline-kernel.sh
           sudo mv ubuntu-mainline-kernel.sh /usr/local/bin/
@@ -24,7 +23,7 @@ jobs:
           sudo sed -i "s/version=.*/version=v${newlatest}/g" /usr/local/bin/ubuntu-mainline-kernel.sh &&
           sudo ubuntu-mainline-kernel.sh -i --yes)
 
-          LTS_VER=5.15
+          LTS_VER=6.1
           latestupstream=$(curl -sL https://kernel.org/ | grep ${LTS_VER} | grep tar.xz | cut -d "/" -f 8 | cut -d "\"" -f 1 | cut -d "-" -f 2 | rev | cut -c 8- | rev)
           sudo sed -i "s/version=.*/version=v${latestupstream}/g" /usr/local/bin/ubuntu-mainline-kernel.sh
           sudo ubuntu-mainline-kernel.sh -i --yes ||
