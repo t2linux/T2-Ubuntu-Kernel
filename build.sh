@@ -114,7 +114,6 @@ sed -i 's/CONFIG_MESSAGE_LOGLEVEL_DEFAULT=.*/CONFIG_MESSAGE_LOGLEVEL_DEFAULT=4/g
 # Copy the modified config
 cp "${WORKING_PATH}/templates/default-config" "${KERNEL_PATH}/.config"
 make olddefconfig
-./scripts/config --module CONFIG_BT_HCIBCM4377
 ./scripts/config --module CONFIG_HID_APPLE_IBRIDGE
 ./scripts/config --module CONFIG_HID_APPLE_TOUCHBAR
 ./scripts/config --module CONFIG_HID_APPLE_MAGIC_BACKLIGHT
