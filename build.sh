@@ -17,7 +17,7 @@ apt-get update
 apt-get install -y lsb-release
 
 KERNEL_VERSION=6.1.14
-PKGREL=1
+PKGREL=2
 CODENAME=$(lsb_release -c | cut -d ":" -f 2 | xargs)
 
 if [[ $USE_T2LINUX_REPO = true ]]
@@ -117,6 +117,7 @@ make olddefconfig
 ./scripts/config --module CONFIG_HID_APPLE_IBRIDGE
 ./scripts/config --module CONFIG_HID_APPLE_TOUCHBAR
 ./scripts/config --module CONFIG_HID_APPLE_MAGIC_BACKLIGHT
+./scripts/config --module CONFIG_BT_HCIBCM4377.
 
 # Get rid of the dirty tag
 echo "" >"${KERNEL_PATH}"/.scmversion
