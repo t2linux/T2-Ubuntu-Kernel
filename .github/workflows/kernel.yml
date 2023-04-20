@@ -140,3 +140,66 @@ jobs:
           draft: false
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+  Build-Lunar:
+    needs: [Lint]
+    runs-on: ubuntu-22.04
+    steps:
+      - name: Free up disk space for the CI
+        uses: AdityaGarg8/remove-unwanted-software@v1
+        with:
+          remove-android: 'true'
+          remove-dotnet: 'true'
+          remove-haskell: 'true'
+
+      - name: 'Checkout Repo'
+        uses: actions/checkout@v3
+
+      - name: Build script
+        id: build
+        run: |
+          mkdir /tmp/artifacts
+          VERSION=$(grep ^KERNEL_VERSION build.sh | head -n1| cut -d = -f2)
+          REL=$(grep "PKGREL=\d*" build.sh | cut -d = -f2)
+          #REL=$( git tag |grep -F $VERSION|sort -r|head -n1|tr -d v)
+          echo Building $VERSION-$REL
+          echo "tag=${VERSION}-${REL}" >> $GITHUB_OUTPUT
+
+          DOCKER_IMAGE=ubuntu:23.04
+          docker pull ${DOCKER_IMAGE}
+          docker run \
+          -t \
+          -v "$(pwd)":/repo \
+          ${DOCKER_IMAGE} \
+          /bin/bash -c 'cd /repo && \
+          apt-get update && \
+          apt-get install -y lsb-release && \
+          mkdir /tmp/artifacts && \
+          ./build.sh && mkdir /repo/debs && \
+          cp -r /tmp/artifacts/* /repo/debs'
+          cp -r "$(pwd)"/debs/* /tmp/artifacts
+
+          cd /tmp/artifacts
+          rm /tmp/artifacts/*dbg*
+          ls -l
+          dpkg-scanpackages . /dev/null | gzip -9c > Packages.gz
+          ls -l
+
+      - name: Upload package artifact
+        uses: actions/upload-artifact@v2
+        with:
+          name: linux-T2-${{ steps.build.outputs.tag }}-lunar
+          path: /tmp/artifacts/*
+
+      - name: Release
+        if: github.ref == 'refs/heads/Mainline'
+        uses: softprops/action-gh-release@v1
+        with:
+          files: |
+            /tmp/artifacts/sha256*
+            /tmp/artifacts/*.deb
+            /tmp/artifacts/kernel_config*
+          tag_name: v${{ steps.build.outputs.tag }}
+          body_path: ${{ github.workspace }}/.github/workflows/instructions.txt
+          draft: false
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
