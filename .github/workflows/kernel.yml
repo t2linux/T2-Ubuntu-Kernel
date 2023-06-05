@@ -27,7 +27,7 @@ jobs:
           shellcheck ./*.sh
   Build-Focal:
     needs: [Lint]
-    runs-on: ubuntu-20.04
+    runs-on: ubuntu-22.04
     steps:
 
       - name: Free up disk space for the CI
@@ -49,7 +49,20 @@ jobs:
           #REL=$( git tag |grep -F $VERSION|sort -r|head -n1|tr -d v)
           echo Building $VERSION-$REL
           echo "tag=${VERSION}-${REL}" >> $GITHUB_OUTPUT
-          sudo ./build.sh
+
+          DOCKER_IMAGE=ubuntu:20.04
+          docker pull ${DOCKER_IMAGE}
+          docker run \
+          -t \
+          -v "$(pwd)":/repo \
+          ${DOCKER_IMAGE} \
+          /bin/bash -c 'cd /repo && \
+          apt-get update && \
+          apt-get install -y lsb-release && \
+          mkdir /tmp/artifacts && \
+          ./build.sh && mkdir /repo/debs && \
+          cp -r /tmp/artifacts/* /repo/debs'
+          cp -r "$(pwd)"/debs/* /tmp/artifacts
 
           cd /tmp/artifacts
           rm /tmp/artifacts/*dbg*
