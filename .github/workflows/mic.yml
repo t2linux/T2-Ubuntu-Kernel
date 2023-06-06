@@ -28,7 +28,7 @@ jobs:
  
           git clone https://github.com/AdityaGarg8/t2-ubuntu-repo.git
           mv ${{ github.workspace }}/t2-apple-audio-dsp-mic_${ver}_amd64.deb ${{ github.workspace }}/t2-ubuntu-repo
-          cd ${{ github.workspace }}/t2-ubuntu-repp
+          cd ${{ github.workspace }}/t2-ubuntu-repo
           # Packages & Packages.gz
           dpkg-scanpackages --multiversion . > Packages
           gzip -k -f Packages
