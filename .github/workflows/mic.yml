@@ -40,7 +40,7 @@ jobs:
         env:
           GPG_SIGNING_EMAIL: ${{ secrets.GPG_SIGNING_EMAIL }}
       - name: Publish
-        if: env.publish == 'yes'
+        #if: env.publish == 'yes'
         uses: cpina/github-action-push-to-another-repository@main
         env:
           SSH_DEPLOY_KEY: ${{ secrets.SSH_DEPLOY_KEY }}
