@@ -23,11 +23,11 @@ jobs:
         id: publish
         run: |
           cd ${{ github.workspace }}
-          echo "ver=0.1.0" >> $GITHUB_ENV
-          wget https://github.com/lemmyg/t2-apple-audio-dsp/releases/download/mic-v${{ env.ver }}/t2-apple-audio-dsp-mic_${{ env.ver }}_amd64.deb
+          ver=0.1.0
+          wget https://github.com/lemmyg/t2-apple-audio-dsp/releases/download/mic-v${ver}/t2-apple-audio-dsp-mic_${ver}_amd64.deb
  
           git clone https://github.com/AdityaGarg8/t2-ubuntu-repo.git
-          mv ${{ github.workspace }}/t2-apple-audio-dsp-mic_${{ env.ver }}_amd64.deb ${{ github.workspace }}/t2-ubuntu-repo
+          mv ${{ github.workspace }}/t2-apple-audio-dsp-mic_${ver}_amd64.deb ${{ github.workspace }}/t2-ubuntu-repo
           cd ${{ github.workspace }}/t2-ubuntu-repp
           # Packages & Packages.gz
           dpkg-scanpackages --multiversion . > Packages
