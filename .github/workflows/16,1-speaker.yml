@@ -1,5 +1,5 @@
 ---
-name: Mic configuration update script
+name: 16,1 speaker configuration update script
 
 on:
   workflow_dispatch:
@@ -25,10 +25,10 @@ jobs:
           cd ${{ github.workspace }}
           ver=0.1.0
           echo "version=${ver}" >> $GITHUB_ENV
-          wget https://github.com/lemmyg/t2-apple-audio-dsp/releases/download/mic-v${ver}/t2-apple-audio-dsp-mic_${ver}_amd64.deb
+          wget https://github.com/lemmyg/t2-apple-audio-dsp/releases/download/speakers-v${ver}/t2-apple-audio-dsp-speakers161_${ver}_amd64.deb
  
           git clone https://github.com/AdityaGarg8/t2-ubuntu-repo.git
-          mv ${{ github.workspace }}/t2-apple-audio-dsp-mic_${ver}_amd64.deb ${{ github.workspace }}/t2-ubuntu-repo
+          mv ${{ github.workspace }}/t2-apple-audio-dsp-speakers161_${ver}_amd64.deb ${{ github.workspace }}/t2-ubuntu-repo
           cd ${{ github.workspace }}/t2-ubuntu-repo
           # Packages & Packages.gz
           dpkg-scanpackages --multiversion . > Packages
@@ -52,5 +52,5 @@ jobs:
           user-email: github-actions[bot]@users.noreply.github.com
           user-name: github-actions[bot]
           target-branch: main
-          commit-message: Update Mic configuration to v${{ env.version }}
+          commit-message: Update 16,1 speaker configuration to v${{ env.version }}
 
