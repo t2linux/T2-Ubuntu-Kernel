@@ -28,7 +28,7 @@ else
 KERNEL_REPOSITORY=https://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable.git
 fi
 
-APPLE_BCE_REPOSITORY=https://github.com/kekrby/apple-bce.git
+#APPLE_BCE_REPOSITORY=https://github.com/kekrby/apple-bce.git
 REPO_PATH=$(pwd)
 WORKING_PATH=/root/work
 KERNEL_PATH="${WORKING_PATH}/linux-kernel"
@@ -66,7 +66,7 @@ else
 git clone --depth 1 --single-branch --branch "v${KERNEL_VERSION}" \
   "${KERNEL_REPOSITORY}" "${KERNEL_PATH}"
 fi
-git clone --depth 1 "${APPLE_BCE_REPOSITORY}" "${KERNEL_PATH}/drivers/staging/apple-bce"
+#git clone --depth 1 "${APPLE_BCE_REPOSITORY}" "${KERNEL_PATH}/drivers/staging/apple-bce"
 cd "${KERNEL_PATH}" || exit
 
 if [[ $USE_T2LINUX_REPO = false ]]
