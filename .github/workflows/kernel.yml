@@ -9,6 +9,7 @@ on:
       - '.github/workflows/apfs.yml'
       - '.github/workflows/gmux.yml'
   pull_request:
+  workflow_dispatch:
 
 jobs:
   Lint:
