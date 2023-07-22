@@ -104,7 +104,6 @@ make clean
 sed -i 's/CONFIG_VERSION_SIGNATURE=.*/CONFIG_VERSION_SIGNATURE=""/g' "${WORKING_PATH}/templates/default-config"
 sed -i 's/CONFIG_SYSTEM_TRUSTED_KEYS=.*/CONFIG_SYSTEM_TRUSTED_KEYS=""/g' "${WORKING_PATH}/templates/default-config"
 sed -i 's/CONFIG_SYSTEM_REVOCATION_KEYS=.*/CONFIG_SYSTEM_REVOCATION_KEYS=""/g' "${WORKING_PATH}/templates/default-config"
-sed -i 's/CONFIG_DEBUG_INFO=y/# CONFIG_DEBUG_INFO is not set/g' "${WORKING_PATH}/templates/default-config"
 
 # I want silent boot
 sed -i 's/CONFIG_CONSOLE_LOGLEVEL_DEFAULT=.*/CONFIG_CONSOLE_LOGLEVEL_DEFAULT=4/g' "${WORKING_PATH}/templates/default-config"
@@ -113,10 +112,20 @@ sed -i 's/CONFIG_MESSAGE_LOGLEVEL_DEFAULT=.*/CONFIG_MESSAGE_LOGLEVEL_DEFAULT=4/g
 
 # Copy the modified config
 cp "${WORKING_PATH}/templates/default-config" "${KERNEL_PATH}/.config"
+./scripts/config --undefine GDB_SCRIPTS
+./scripts/config --undefine DEBUG_INFO
+./scripts/config --undefine DEBUG_INFO_SPLIT
+./scripts/config --undefine DEBUG_INFO_REDUCED
+./scripts/config --undefine DEBUG_INFO_COMPRESSED
+./scripts/config --set-val  DEBUG_INFO_NONE       y
+./scripts/config --set-val  DEBUG_INFO_DWARF5     n
 make olddefconfig
 ./scripts/config --module CONFIG_HID_APPLE_IBRIDGE
 ./scripts/config --module CONFIG_HID_APPLE_TOUCHBAR
 ./scripts/config --module CONFIG_HID_APPLE_MAGIC_BACKLIGHT
+
+cat ${KERNEL_PATH}/.config
+exit 0
 
 # Get rid of the dirty tag
 echo "" >"${KERNEL_PATH}"/.scmversion
