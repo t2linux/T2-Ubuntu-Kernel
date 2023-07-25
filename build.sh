@@ -16,8 +16,8 @@ export DEBIAN_FRONTEND=noninteractive
 apt-get update
 apt-get install -y lsb-release
 
-KERNEL_VERSION=6.4.5
-PKGREL=2
+KERNEL_VERSION=6.4.6
+PKGREL=1
 CODENAME=$(lsb_release -c | cut -d ":" -f 2 | xargs)
 
 if [[ $USE_T2LINUX_REPO = true ]]
