@@ -1,5 +1,5 @@
 Package: t2-kernel-script
-Version: 7.7.1
+Version: 7.7.2
 Maintainer: Aditya Garg
 Architecture: amd64
 Description: Kernel upgrade script for Mainline kernels
