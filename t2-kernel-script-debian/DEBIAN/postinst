@@ -1,2 +1,1 @@
 chmod 755 /usr/bin/update_t2_kernel
-chmod a+x /usr/local/bin/touchbar
