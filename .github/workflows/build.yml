@@ -8,9 +8,7 @@ on:
       - '.github/workflows/*.yml'
       - 'apt-repo/*.txt'
   pull_request:
-    paths-ignore:
-      - '.github/workflows/*.yml'
-      - 'apt-repo/*.txt'
+  workflow_dispatch:
 
 jobs:
   lint:
@@ -53,9 +51,22 @@ jobs:
           sed -i "s/REL/${KREL}-${UREL}/g" \
           ${{ github.workspace }}/.github/workflows/instructions.txt
 
-          sudo ./build.sh
+          DOCKER_IMAGE=ubuntu:23.04
+          docker pull ${DOCKER_IMAGE}
+          docker run \
+          -t \
+          -v "$(pwd)":/repo \
+          ${DOCKER_IMAGE} \
+          /bin/bash -c 'cd /repo && \
+          apt-get update && \
+          apt-get install -y lsb-release && \
+          mkdir /tmp/artifacts && \
+          ./build.sh && mkdir /repo/debs && \
+          cp -r /tmp/artifacts/* /repo/debs'
+          cp -r "$(pwd)"/debs/* /tmp/artifacts
+
           echo Built $KREL-$UREL-generic-$PREL
-          echo "::set-output name=tag::${KREL}-${UREL}-generic-${PREL}"
+          echo "tag=${KREL}-${UREL}-generic-${PREL}" >> $GITHUB_OUTPUT
           cd /tmp/artifacts
           ls -l
           dpkg-scanpackages . /dev/null | gzip -9c > Packages.gz

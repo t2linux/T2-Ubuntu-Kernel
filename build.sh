@@ -2,14 +2,12 @@
 
 set -eu -o pipefail
 
-KERNEL_REL=5.15.0
-UBUNTU_REL=32.33
+KERNEL_REL=6.2.0
+UBUNTU_REL=27.28
 PKGREL=1
 KERNEL_BRANCH="Ubuntu-${KERNEL_REL}-${UBUNTU_REL}"
 KERNEL_VERSION="${KERNEL_REL}-${UBUNTU_REL}-generic"
-KERNEL_REPOSITORY=git://git.launchpad.net/~ubuntu-kernel/ubuntu/+source/linux/+git/jammy
-APPLE_BCE_REPOSITORY=https://github.com/t2linux/apple-bce-drv.git
-APPLE_IBRIDGE_REPOSITORY=https://github.com/Redecorating/apple-ib-drv.git
+KERNEL_REPOSITORY=git://git.launchpad.net/~ubuntu-kernel/ubuntu/+source/linux/+git/lunar
 REPO_PATH=$(pwd)
 WORKING_PATH=/root/work
 KERNEL_PATH="${WORKING_PATH}/linux-kernel"
@@ -42,8 +40,6 @@ apt-get install -y build-essential fakeroot libncurses-dev bison flex libssl-dev
 ### get Kernel
 git clone --depth 1 --single-branch --branch "${KERNEL_BRANCH}" \
   "${KERNEL_REPOSITORY}" "${KERNEL_PATH}"
-git clone --depth 1 "${APPLE_BCE_REPOSITORY}" "${KERNEL_PATH}/drivers/staging/apple-bce"
-git clone --depth 1 "${APPLE_IBRIDGE_REPOSITORY}" "${KERNEL_PATH}/drivers/staging/apple-ibridge"
 cd "${KERNEL_PATH}" || exit
 
 #### Create patch file with custom drivers
