@@ -3,7 +3,7 @@
 set -eu -o pipefail
 
 KERNEL_REL=6.2.0
-UBUNTU_REL=27.27
+UBUNTU_REL=30.30
 PKGREL=1
 KERNEL_BRANCH="Ubuntu-${KERNEL_REL}-${UBUNTU_REL}"
 KERNEL_VERSION="${KERNEL_REL}-${UBUNTU_REL}-generic"
@@ -69,7 +69,6 @@ echo >&2 "===]> Info: Bulding src... "
 
 cd "${KERNEL_PATH}"
 # Update the config
-debian/rules updateconfigs
 
 # Build Deb packages
 sed -i "s/${KERNEL_REL}-${UBUNTU_REL}/${KERNEL_REL}-${UBUNTU_REL}+t2/g" debian.master/changelog
