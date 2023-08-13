@@ -31,7 +31,7 @@ If you want to install an older kernel (i.e. older than 5.16.2 or 5.15.16 (LTS))
 
 ### Using the Kernel Upgrade script
 
-Firstly add the **t2-ubuntu-repo** apt repo :-
+Firstly add the [t2-ubuntu-repo](https://adityagarg8.github.io/t2-ubuntu-repo/) apt repo :-
 
 ```bash
 curl -s --compressed "https://adityagarg8.github.io/t2-ubuntu-repo/KEY.gpg" | gpg --dearmor | sudo tee /etc/apt/trusted.gpg.d/t2-ubuntu-repo.gpg >/dev/null
