@@ -6,7 +6,7 @@ BUILD_PATH=/tmp/build-kernel
 
 ### Apple T2 drivers commit hashes
 # Patches
-APPLE_SMC_DRIVER_GIT_URL=https://github.com/t2linux/linux-t2-patches
+APPLE_SMC_DRIVER_GIT_URL=https://github.com/mahboobkarimian/t2-paches-for-Ubuntu-kernel
 APPLE_SMC_DRIVER_BRANCH_NAME=main
 APPLE_SMC_DRIVER_COMMIT_HASH=ffec4df5af149ed3d3ca29899f1168fd16c2308c
 ##BCE
@@ -27,8 +27,6 @@ git clone --single-branch --branch ${APPLE_SMC_DRIVER_BRANCH_NAME} ${APPLE_SMC_D
   "${BUILD_PATH}/linux-mbp-arch"
 cd "${BUILD_PATH}/linux-mbp-arch" || exit
 git checkout ${APPLE_SMC_DRIVER_COMMIT_HASH}
-rm 2001*
-rm 100*
 
 while IFS= read -r file; do
   echo "==> Adding ${file}"
