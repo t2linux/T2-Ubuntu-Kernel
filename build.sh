@@ -68,6 +68,8 @@ chmod a+x "${KERNEL_PATH}"/debian/scripts/misc/*
 echo >&2 "===]> Info: Bulding src... "
 
 cd "${KERNEL_PATH}"
+# Update the config
+debian/rules updateconfigs
 
 # Build Deb packages
 sed -i "s/${KERNEL_REL}-${UBUNTU_REL}/${KERNEL_REL}-${UBUNTU_REL}+t2/g" debian.master/changelog
