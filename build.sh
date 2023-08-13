@@ -36,7 +36,8 @@ apt-get update
 apt-get install -y build-essential fakeroot libncurses-dev bison flex libssl-dev libelf-dev \
   openssl dkms libudev-dev libpci-dev libiberty-dev autoconf wget xz-utils git \
   libcap-dev bc rsync cpio dh-modaliases debhelper kernel-wedge curl gawk dwarves llvm zstd \
-  rust-1.62-all rust-1.62-src bindgen-0.56 default-jdk
+  rust-1.62-all rust-1.62-src bindgen-0.56 default-jdk liblzma-dev libzstd-dev libdw-dev \
+  systemtap-sdt-dev libunwind-dev libslang2-dev libnuma-dev libbabeltrace-dev libtraceevent-dev
 
 ### get Kernel
 git clone --depth 1 --single-branch --branch "${KERNEL_BRANCH}" \
