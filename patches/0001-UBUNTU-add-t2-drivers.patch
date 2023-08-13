@@ -1,7 +1,7 @@
 From cbac9db704c2c0ec25bac3609b0ade33886a559a Mon Sep 17 00:00:00 2001
 From: Aditya Garg <gargaditya08@live.com>
 Date: Sun, 13 Aug 2023 22:59:18 +0530
-Subject: [PATCH] Add t2 drivers
+Subject: [PATCH] Ubuntu: Add t2 drivers
 
 ---
  annotations.txt | 4 ++++
@@ -9,8 +9,8 @@ Subject: [PATCH] Add t2 drivers
 
 diff --git a/annotations.txt b/annotations.txt
 index cb24ca1..d57babd 100644
---- a/annotations.txt
-+++ b/annotations.txt
+--- a/debian.master/config/annotations
++++ b/debian.master/config/annotations
 @@ -1136,6 +1136,7 @@ CONFIG_APPLDATA_NET_SUM                         policy<{'s390x': 'm'}>
  CONFIG_APPLDATA_OS                              policy<{'s390x': 'm'}>
  CONFIG_APPLE_ADMAC                              policy<{'arm64': 'm'}>
