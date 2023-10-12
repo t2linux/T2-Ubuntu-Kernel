@@ -17,7 +17,7 @@ apt-get update
 apt-get install -y lsb-release
 
 KERNEL_VERSION=6.5.7
-PKGREL=1
+PKGREL=2
 CODENAME=$(lsb_release -c | cut -d ":" -f 2 | xargs)
 
 if [[ $USE_T2LINUX_REPO = true ]]
@@ -125,8 +125,9 @@ cp "${WORKING_PATH}/templates/default-config" "${KERNEL_PATH}/.config"
 make olddefconfig
 
 # Enable T2 drivers
-./scripts/config --module CONFIG_HID_APPLE_IBRIDGE
-./scripts/config --module CONFIG_HID_APPLE_TOUCHBAR
+./scripts/config --module CONFIG_HID_APPLETB_BL
+./scripts/config --module CONFIG_HID_APPLETB_KBD
+./scripts/config --module CONFIG_DRM_APPLETBDRM
 ./scripts/config --module CONFIG_HID_APPLE_MAGIC_BACKLIGHT
 
 # Get rid of the dirty tag
