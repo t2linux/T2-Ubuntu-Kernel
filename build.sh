@@ -52,6 +52,11 @@ cd "${KERNEL_PATH}" || exit
 cd "${KERNEL_PATH}" || exit
 
 echo >&2 "===]> Info: Applying patches... "
+rm -rf ${WORKING_PATH}/patches/2003*
+rm -rf ${WORKING_PATH}/patches/2004*
+rm -rf ${WORKING_PATH}/patches/2006*
+rm -rf ${WORKING_PATH}/patches/2007*
+
 [ ! -d "${WORKING_PATH}/patches" ] && {
   echo 'Patches directory not found!'
   exit 1
