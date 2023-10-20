@@ -53,7 +53,7 @@ cd "${KERNEL_PATH}" || exit
 
 echo >&2 "===]> Info: Applying patches... "
 rm -rf ${WORKING_PATH}/patches/200* # Probbaly will mess up iGPU switch!
-rm -rf ${WORKING_PATH}/patches/800* # Wifi patches are already in 6.5
+rm -rf ${WORKING_PATH}/patches/800* # Wifi patches are already in 6.5 
 [ ! -d "${WORKING_PATH}/patches" ] && {
   echo 'Patches directory not found!'
   exit 1
