@@ -2,12 +2,12 @@
 
 set -eu -o pipefail
 
-KERNEL_REL=6.2.0
-UBUNTU_REL=30.30
+KERNEL_REL=6.5.0
+UBUNTU_REL=10.10
 PKGREL=1
 KERNEL_BRANCH="Ubuntu-${KERNEL_REL}-${UBUNTU_REL}"
 KERNEL_VERSION="${KERNEL_REL}-${UBUNTU_REL}-generic"
-KERNEL_REPOSITORY=git://git.launchpad.net/~ubuntu-kernel/ubuntu/+source/linux/+git/lunar
+KERNEL_REPOSITORY=git://git.launchpad.net/~ubuntu-kernel/ubuntu/+source/linux/+git/mantic
 REPO_PATH=$(pwd)
 WORKING_PATH=/root/work
 KERNEL_PATH="${WORKING_PATH}/linux-kernel"
