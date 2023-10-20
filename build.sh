@@ -54,6 +54,7 @@ cd "${KERNEL_PATH}" || exit
 echo >&2 "===]> Info: Applying patches... "
 rm -rf ${WORKING_PATH}/patches/2003*
 rm -rf ${WORKING_PATH}/patches/2004*
+rm -rf ${WORKING_PATH}/patches/2005*
 rm -rf ${WORKING_PATH}/patches/2006*
 rm -rf ${WORKING_PATH}/patches/2007*
 
