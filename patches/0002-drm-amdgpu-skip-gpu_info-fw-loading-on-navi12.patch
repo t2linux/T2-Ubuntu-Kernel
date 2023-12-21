@@ -1,0 +1,37 @@
+From 197a96dc2d0c294232bfc1a0f5d31e4658f99f2b Mon Sep 17 00:00:00 2001
+From: Alex Deucher <alexander.deucher@amd.com>
+Date: Wed, 20 Dec 2023 12:36:08 -0500
+Subject: [PATCH 2/2] drm/amdgpu: skip gpu_info fw loading on navi12
+
+It's no longer required.
+
+Signed-off-by: Alex Deucher <alexander.deucher@amd.com>
+---
+ drivers/gpu/drm/amd/amdgpu/amdgpu_device.c | 11 ++---------
+ 1 file changed, 2 insertions(+), 9 deletions(-)
+
+diff --git a/drivers/gpu/drm/amd/amdgpu/amdgpu_device.c b/drivers/gpu/drm/amd/amdgpu/amdgpu_device.c
+index 8dee52ce26d0..93cf73d6fa11 100644
+--- a/drivers/gpu/drm/amd/amdgpu/amdgpu_device.c
++++ b/drivers/gpu/drm/amd/amdgpu/amdgpu_device.c
+@@ -2188,15 +2188,8 @@ static int amdgpu_device_parse_gpu_info_fw(struct amdgpu_device *adev)
+ 
+ 	adev->firmware.gpu_info_fw = NULL;
+ 
+-	if (adev->mman.discovery_bin) {
+-		/*
+-		 * FIXME: The bounding box is still needed by Navi12, so
+-		 * temporarily read it from gpu_info firmware. Should be dropped
+-		 * when DAL no longer needs it.
+-		 */
+-		if (adev->asic_type != CHIP_NAVI12)
+-			return 0;
+-	}
++	if (adev->mman.discovery_bin)
++		return 0;
+ 
+ 	switch (adev->asic_type) {
+ 	default:
+-- 
+2.42.0
+
