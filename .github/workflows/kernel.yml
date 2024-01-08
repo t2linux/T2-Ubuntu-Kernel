@@ -66,7 +66,7 @@ jobs:
           path: /tmp/artifacts/*
 
       - name: Release
-        if: github.ref == 'refs/heads/Mainline'
+        if: github.ref == 'refs/heads/LTS'
         uses: softprops/action-gh-release@v1
         with:
           files: |
@@ -129,7 +129,7 @@ jobs:
           path: /tmp/artifacts/*
 
       - name: Release
-        if: github.ref == 'refs/heads/Mainline'
+        if: github.ref == 'refs/heads/LTS'
         uses: softprops/action-gh-release@v1
         with:
           files: |
@@ -192,7 +192,7 @@ jobs:
           path: /tmp/artifacts/*
 
       - name: Release
-        if: github.ref == 'refs/heads/Mainline'
+        if: github.ref == 'refs/heads/LTS'
         uses: softprops/action-gh-release@v1
         with:
           files: |
