@@ -23,7 +23,7 @@ jobs:
           sudo sed -i "s/version=.*/version=v${newlatest}/g" /usr/local/bin/ubuntu-mainline-kernel.sh &&
           sudo ubuntu-mainline-kernel.sh -i --yes)
 
-          LTS_VER=6.1
+          LTS_VER=6.6
           latestupstream=$(curl -sL https://kernel.org/ | grep ${LTS_VER} | grep tar.xz | cut -d "/" -f 8 | cut -d "\"" -f 1 | cut -d "-" -f 2 | rev | cut -c 8- | rev)
           sudo sed -i "s/version=.*/version=v${latestupstream}/g" /usr/local/bin/ubuntu-mainline-kernel.sh
           sudo ubuntu-mainline-kernel.sh -i --yes ||
