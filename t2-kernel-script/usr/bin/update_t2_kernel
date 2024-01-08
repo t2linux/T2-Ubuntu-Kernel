@@ -22,7 +22,7 @@ set -e
 cd /tmp
 
 use_lts=false
-lts_version=6.1
+lts_version=6.6
 CODENAME=$(lsb_release -c | cut -d ":" -f 2 | xargs)
 
 # Linux Mint
