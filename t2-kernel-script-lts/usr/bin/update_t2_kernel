@@ -70,7 +70,7 @@ The latest LTS version 6.1.71 shall be installed and no further kernel upgrades 
 
 EOF
 latest=v6.1.71-1
-latestk=6.1.71-t2-jammy
+latestk=6.1.71-t2-focal
 latestkver=6.1.71-1
 fi
 
