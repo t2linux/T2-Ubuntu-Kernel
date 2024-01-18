@@ -61,7 +61,7 @@ latestkver=$(echo $latest | cut -d "v" -f 2)
 latestk=$(echo $latest | cut -c 2- | cut -d "-" -f 1 | awk '{print $1"-t2"}')-${EFFECTIVE_CODENAME}
 fi
 
-if [[ (${EFFECTIVE_CODENAME} = jammy) ]]
+if [[ (${EFFECTIVE_CODENAME} = focal) ]]
 then
 cat <<EOF
 You seem to be using Ubuntu 20.04 Focal Fossa or its derived distro.
