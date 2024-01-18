@@ -61,6 +61,17 @@ latestkver=$(echo $latest | cut -d "v" -f 2)
 latestk=$(echo $latest | cut -c 2- | cut -d "-" -f 1 | awk '{print $1"-t2"}')-${EFFECTIVE_CODENAME}
 fi
 
+if [[ (${EFFECTIVE_CODENAME} = jammy) ]]
+then
+cat <<EOF
+You seem to be using Ubuntu 20.04 Focal Fossa or its derived distro.
+These distros are no longer supported
+The latest LTS version 6.1.71 shall be installed and no further kernel upgrades shall be available.\n"
+latest=v6.1.71-1
+latestk=6.1.71-t2-jammy
+latestkver=6.1.71-1
+fi
+
 currentk=$(uname -r)
 currentkver=$(apt show linux-image-${currentk} 2>/dev/null | grep Version | cut -d ":" -f 2 | xargs)
 existingK=($(dpkg --list | grep linux-image- | grep 't2\|mbp' | cut -d ' ' -f 2-3 ))
