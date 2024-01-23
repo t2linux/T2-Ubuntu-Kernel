@@ -29,7 +29,7 @@ CODENAME=$(lsb_release -c | cut -d ":" -f 2 | xargs)
 if [[ (${CODENAME} = ulyana) || (${CODENAME} = ulyssa) || (${CODENAME} = uma) || (${CODENAME} = una) ]]
 then
 EFFECTIVE_CODENAME=focal
-elif [[ (${CODENAME} = vanessa) || (${CODENAME} = vera) || (${CODENAME} = victoria) ]]
+elif [[ (${CODENAME} = vanessa) || (${CODENAME} = vera) || (${CODENAME} = victoria) || (${CODENAME} = virginia) ]]
 then
 EFFECTIVE_CODENAME=jammy
 
