@@ -29,35 +29,60 @@ If you want to install an older kernel (i.e. older than 5.16.2 or 5.15.16 (LTS))
 
 ## INSTALLATION
 
-### Using the Kernel Upgrade script
+### Using the apt repo
 
-Firstly add the [t2-ubuntu-repo](https://adityagarg8.github.io/t2-ubuntu-repo/) apt repo :-
+Firstly add the [t2-ubuntu-repo](https://adityagarg8.github.io/t2-ubuntu-repo/) apt repo. Ypu need to follow these steps to add it:
+
+1. Identify your release codename. It is: 
+  
+    a) `jammy` for **Ubuntu 22.04**
+
+    b) `mantic` for **Ubuntu 23.10**
+
+    You can also run `lsb_release -a` to identify your codename.
+
+2. Run the following (taking `jammy` as the example, just replace it with your release codename in the first line):
 
 ```bash
+CODENAME=jammy
 curl -s --compressed "https://adityagarg8.github.io/t2-ubuntu-repo/KEY.gpg" | gpg --dearmor | sudo tee /etc/apt/trusted.gpg.d/t2-ubuntu-repo.gpg >/dev/null
 sudo curl -s --compressed -o /etc/apt/sources.list.d/t2.list "https://adityagarg8.github.io/t2-ubuntu-repo/t2.list"
+echo "deb [signed-by=/etc/apt/trusted.gpg.d/t2-ubuntu-repo.gpg] https://github.com/AdityaGarg8/t2-ubuntu-repo/releases/download/${CODENAME} ./" | sudo tee -a /etc/apt/sources.list.d/t2.list
 sudo apt update
 ```
 
-Then, install the script by running :-
+Currently, 2 types of kernel variants are available. You can use anyone as per your choice:
+
+1. Mainline kernels:
+
+    If you want to install **Mainline** kernels, install `linux-t2` package:
+
+    ```bash
+    sudo apt install linux-t2
+    ```
+
+    **Note: The Mainline kernels are shipped by default if you have used the iso from [T2-Ubuntu](https://github.com/t2linux/T2-Ubuntu), but you STILL HAVE TO INSTALL THIS to receive kernel updates after installing Ubuntu**
+
+2. LTS kernels:
+
+    If you want to install **LTS** kernels, install `linux-t2-lts` package:
+
+    ```bash
+    sudo apt install linux-t2-lts
+    ```
+
+Now, whenever a new kernel is released, you can use **Software updater** or run `sudo apt upgrade` to get it.
+
+#### Changing kernel variant:
+
+If you want to change the kernel variant, say from Mainline to LTS, first install the package of the kernel, and then remove the current kernel. Eg, if you wanna switch to LTS from Mainline, run:
 
 ```bash
-sudo apt install t2-kernel-script
+sudo apt install linux-t2-lts
+sudo apt remove linux-headers-$(uname -r) linux-image-$(uname -r)
 ```
 
-If you want to install the latest LTS kernels, then run this instead :-
-
-```bash
-sudo apt install t2-kernel-script-lts
-```
-
-Now, whenever you wish to upgrade your kernel, run :-
-
-```bash
-update_t2_kernel
-```
-
-**Note :-** By default, whenever you run `update_t2_kernel`, the script installs the latest Kernel (LTS or Mainline, depending on your script) as well as preserves the Kernel which is booted during running of the script. Rest all old T2 kernels get removed (self compiled and official Ubuntu Kernels are not affected). In case you wish to remove the Kernel which is booted as well, which may be required which switching to LTS Kernel from Mainline ones, run `update_t2_kernel --remove-current`.
+Simply replace `linux-t2-lts` in the above command with the kernel variant you want to use.
 
 ### Download package manually
 
