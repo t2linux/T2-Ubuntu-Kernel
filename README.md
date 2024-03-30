@@ -31,7 +31,7 @@ If you want to install an older kernel (i.e. older than 5.16.2 or 5.15.16 (LTS))
 
 ### Using the apt repo
 
-Firstly add the [t2-ubuntu-repo](https://adityagarg8.github.io/t2-ubuntu-repo/) apt repo. Ypu need to follow these steps to add it:
+Firstly add the [t2-ubuntu-repo](https://adityagarg8.github.io/t2-ubuntu-repo/) apt repo. You need to follow these steps to add it:
 
 1. Identify your release codename. It is: 
   
