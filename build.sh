@@ -17,7 +17,7 @@ apt-get update
 apt-get install -y lsb-release
 
 KERNEL_VERSION=6.8.5
-PKGREL=1
+PKGREL=xanmod1
 CODENAME=$(lsb_release -c | cut -d ":" -f 2 | xargs)
 
 if [[ $USE_T2LINUX_REPO = true ]]
@@ -25,7 +25,7 @@ then
 KERNEL_REPOSITORY=https://github.com/t2linux/kernel.git
 else
 #KERNEL_REPOSITORY=git://kernel.ubuntu.com/virgin/linux-stable.git
-KERNEL_REPOSITORY=https://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable.git
+KERNEL_REPOSITORY=https://gitlab.com/xanmod/linux.git
 fi
 
 #APPLE_BCE_REPOSITORY=https://github.com/kekrby/apple-bce.git
@@ -63,7 +63,7 @@ then
 git clone --depth 1 --single-branch --branch "t2-v${KERNEL_VERSION}" \
   "${KERNEL_REPOSITORY}" "${KERNEL_PATH}"
 else
-git clone --depth 1 --single-branch --branch "v${KERNEL_VERSION}" \
+git clone --depth 1 --single-branch --branch "${KERNEL_VERSION}-${PKGREL}" \
   "${KERNEL_REPOSITORY}" "${KERNEL_PATH}"
 fi
 #git clone --depth 1 "${APPLE_BCE_REPOSITORY}" "${KERNEL_PATH}/drivers/staging/apple-bce"
@@ -101,17 +101,17 @@ cd "${KERNEL_PATH}"
 make clean
 
 # Make config friendly with vanilla kernel
-sed -i 's/CONFIG_VERSION_SIGNATURE=.*/CONFIG_VERSION_SIGNATURE=""/g' "${WORKING_PATH}/templates/default-config"
-sed -i 's/CONFIG_SYSTEM_TRUSTED_KEYS=.*/CONFIG_SYSTEM_TRUSTED_KEYS=""/g' "${WORKING_PATH}/templates/default-config"
-sed -i 's/CONFIG_SYSTEM_REVOCATION_KEYS=.*/CONFIG_SYSTEM_REVOCATION_KEYS=""/g' "${WORKING_PATH}/templates/default-config"
+sed -i 's/CONFIG_VERSION_SIGNATURE=.*/CONFIG_VERSION_SIGNATURE=""/g' "${KERNEL_PATH}/CONFIGS/xanmod/gcc/config_x86-64-v3"
+sed -i 's/CONFIG_SYSTEM_TRUSTED_KEYS=.*/CONFIG_SYSTEM_TRUSTED_KEYS=""/g' "${KERNEL_PATH}/CONFIGS/xanmod/gcc/config_x86-64-v3"
+sed -i 's/CONFIG_SYSTEM_REVOCATION_KEYS=.*/CONFIG_SYSTEM_REVOCATION_KEYS=""/g' "${KERNEL_PATH}/CONFIGS/xanmod/gcc/config_x86-64-v3"
 
 # I want silent boot
-sed -i 's/CONFIG_CONSOLE_LOGLEVEL_DEFAULT=.*/CONFIG_CONSOLE_LOGLEVEL_DEFAULT=4/g' "${WORKING_PATH}/templates/default-config"
-sed -i 's/CONFIG_CONSOLE_LOGLEVEL_QUIET=.*/CONFIG_CONSOLE_LOGLEVEL_QUIET=1/g' "${WORKING_PATH}/templates/default-config"
-sed -i 's/CONFIG_MESSAGE_LOGLEVEL_DEFAULT=.*/CONFIG_MESSAGE_LOGLEVEL_DEFAULT=4/g' "${WORKING_PATH}/templates/default-config"
+sed -i 's/CONFIG_CONSOLE_LOGLEVEL_DEFAULT=.*/CONFIG_CONSOLE_LOGLEVEL_DEFAULT=4/g' "${KERNEL_PATH}/CONFIGS/xanmod/gcc/config_x86-64-v3"
+sed -i 's/CONFIG_CONSOLE_LOGLEVEL_QUIET=.*/CONFIG_CONSOLE_LOGLEVEL_QUIET=1/g' "${KERNEL_PATH}/CONFIGS/xanmod/gcc/config_x86-64-v3"
+sed -i 's/CONFIG_MESSAGE_LOGLEVEL_DEFAULT=.*/CONFIG_MESSAGE_LOGLEVEL_DEFAULT=4/g' "${KERNEL_PATH}/CONFIGS/xanmod/gcc/config_x86-64-v3"
 
 # Copy the modified config
-cp "${WORKING_PATH}/templates/default-config" "${KERNEL_PATH}/.config"
+cp "${KERNEL_PATH}/CONFIGS/xanmod/gcc/config_x86-64-v3" "${KERNEL_PATH}/.config"
 
 # Disable debug info
 ./scripts/config --undefine GDB_SCRIPTS
