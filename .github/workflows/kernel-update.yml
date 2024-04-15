@@ -122,6 +122,11 @@ jobs:
           echo "Stable Mainline"
           latestpkgupstream=$(curl -sL https://xanmod.org/ | grep -A1 "Stable Mainline" | grep xanmod | cut -d ">" -f 3 | cut -d "-" -f 2)
           fi
+
+          echo "latestrelease: ${latestrelease}"
+          echo "latestupstream: ${latestupstream}"
+          echo "latestpkgrel: ${latestpkgrel}"
+          echo "latestpkgupstream: ${latestpkgupstream}"
           
           if [[ ( ${latestrelease} = ${latestupstream} ) && ( ${latestpkgrel} = ${latestpkgupstream} ) ]]
           then
