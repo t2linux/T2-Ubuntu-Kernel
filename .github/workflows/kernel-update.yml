@@ -89,4 +89,62 @@ jobs:
         with:
           github_token: ${{ secrets.PAT }}
           branch: LTS
+  Mainline_Xanmod:
+    runs-on: ubuntu-latest
+    steps:
+
+      - name: 'Checkout Repo'
+        uses: actions/checkout@v3
+        with:
+          ref: Mainline-Xanmod
+          persist-credentials: false
+          fetch-depth: 0
+
+      - name: Check for update
+        id: publish
+        run: |
+          latestrelease=$(grep ^KERNEL_VERSION build.sh | head -n1| cut -d = -f2)
+          if [[ $(curl -sL https://xanmod.org/ | grep -A1 "Rolling Release" | grep xanmod | cut -d ">" -f 3 | cut -d "-" -f 1) ]]
+          then
+          echo "Rolling Release"
+          latestupstream=$(curl -sL https://xanmod.org/ | grep -A1 "Rolling Release" | grep xanmod | cut -d ">" -f 3 | cut -d "-" -f 1)
+          else
+          echo "Stable Mainline"
+          latestupstream=$(curl -sL https://xanmod.org/ | grep -A1 "Stable Mainline" | grep xanmod | cut -d ">" -f 3 | cut -d "-" -f 1)
+          fi
+
+          latestpkgrel=$(grep "PKGREL=\d*" build.sh | cut -d = -f2)
+          if [[ $(curl -sL https://xanmod.org/ | grep -A1 "Rolling Release" | grep xanmod | cut -d ">" -f 3 | cut -d "-" -f 2) ]]
+          then
+          echo "Rolling Release"
+          latestpkgupstream=$(curl -sL https://xanmod.org/ | grep -A1 "Rolling Release" | grep xanmod | cut -d ">" -f 3 | cut -d "-" -f 2)
+          else
+          echo "Stable Mainline"
+          latestpkgupstream=$(curl -sL https://xanmod.org/ | grep -A1 "Stable Mainline" | grep xanmod | cut -d ">" -f 3 | cut -d "-" -f 2)
+          fi
+          
+          if [[ ( ${latestrelease} = ${latestupstream} ) && ( ${latestpkgrel} = ${latestpkgupstream} ) ]]
+          then
+            echo "publish=no" >> $GITHUB_ENV
+            exit 0
+          else
+            echo "publish=yes" >> $GITHUB_ENV
+            sed -i "s/${latestrelease}/${latestupstream}/g" ${{ github.workspace }}/build.sh
+            sed -i "s/PKGREL=.*/PKGREL=${latestpkgupstream}/g" ${{ github.workspace }}/build.sh
+            echo "ver=${latestupstream}-${latestpkgupstream}" >> $GITHUB_ENV
+          fi
+      - name: Update the repo
+        if: env.publish == 'yes'
+        id: clean
+        run: |
+          cd ${{ github.workspace }}
+          git config --local user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git config --local user.name "github-actions[bot]"
+          git commit -m "Update kernel to v${{ env.ver }}" -a
+      - name: Push changes to the repo
+        if: env.publish == 'yes'
+        uses: ad-m/github-push-action@master
+        with:
+          github_token: ${{ secrets.PAT }}
+          branch: Mainline-Xanmod
 
