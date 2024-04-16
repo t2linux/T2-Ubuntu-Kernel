@@ -9,12 +9,12 @@ export DEBIAN_FRONTEND=noninteractive
 apt-get update
 apt-get install -y lsb-release
 
-KERNEL_VERSION=6.6.27
-PKGREL=1
+KERNEL_VERSION=6.6.26
+PKGREL=xanmod1
 CODENAME=$(lsb_release -c | cut -d ":" -f 2 | xargs)
 
 #KERNEL_REPOSITORY=git://kernel.ubuntu.com/virgin/linux-stable.git
-KERNEL_REPOSITORY=https://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable.git
+KERNEL_REPOSITORY=https://gitlab.com/xanmod/linux.git
 
 REPO_PATH=$(pwd)
 WORKING_PATH=/root/work
@@ -45,7 +45,7 @@ apt-get install -y build-essential fakeroot libncurses-dev bison flex libssl-dev
   libcap-dev bc rsync cpio dh-modaliases debhelper kernel-wedge curl gawk dwarves zstd python3
 
 ### get Kernel and Drivers
-git clone --depth 1 --single-branch --branch "v${KERNEL_VERSION}" \
+git clone --depth 1 --single-branch --branch "${KERNEL_VERSION}-${PKGREL}" \
   "${KERNEL_REPOSITORY}" "${KERNEL_PATH}"
 
 cd "${KERNEL_PATH}" || exit
@@ -79,17 +79,17 @@ cd "${KERNEL_PATH}"
 make clean
 
 # Make config friendly with vanilla kernel
-sed -i 's/CONFIG_VERSION_SIGNATURE=.*/CONFIG_VERSION_SIGNATURE=""/g' "${WORKING_PATH}/templates/default-config"
-sed -i 's/CONFIG_SYSTEM_TRUSTED_KEYS=.*/CONFIG_SYSTEM_TRUSTED_KEYS=""/g' "${WORKING_PATH}/templates/default-config"
-sed -i 's/CONFIG_SYSTEM_REVOCATION_KEYS=.*/CONFIG_SYSTEM_REVOCATION_KEYS=""/g' "${WORKING_PATH}/templates/default-config"
+sed -i 's/CONFIG_VERSION_SIGNATURE=.*/CONFIG_VERSION_SIGNATURE=""/g' "${KERNEL_PATH}/CONFIGS/xanmod/gcc/config_x86-64-v3"
+sed -i 's/CONFIG_SYSTEM_TRUSTED_KEYS=.*/CONFIG_SYSTEM_TRUSTED_KEYS=""/g' "${KERNEL_PATH}/CONFIGS/xanmod/gcc/config_x86-64-v3"
+sed -i 's/CONFIG_SYSTEM_REVOCATION_KEYS=.*/CONFIG_SYSTEM_REVOCATION_KEYS=""/g' "${KERNEL_PATH}/CONFIGS/xanmod/gcc/config_x86-64-v3"
 
 # I want silent boot
-sed -i 's/CONFIG_CONSOLE_LOGLEVEL_DEFAULT=.*/CONFIG_CONSOLE_LOGLEVEL_DEFAULT=4/g' "${WORKING_PATH}/templates/default-config"
-sed -i 's/CONFIG_CONSOLE_LOGLEVEL_QUIET=.*/CONFIG_CONSOLE_LOGLEVEL_QUIET=1/g' "${WORKING_PATH}/templates/default-config"
-sed -i 's/CONFIG_MESSAGE_LOGLEVEL_DEFAULT=.*/CONFIG_MESSAGE_LOGLEVEL_DEFAULT=4/g' "${WORKING_PATH}/templates/default-config"
+sed -i 's/CONFIG_CONSOLE_LOGLEVEL_DEFAULT=.*/CONFIG_CONSOLE_LOGLEVEL_DEFAULT=4/g' "${KERNEL_PATH}/CONFIGS/xanmod/gcc/config_x86-64-v3"
+sed -i 's/CONFIG_CONSOLE_LOGLEVEL_QUIET=.*/CONFIG_CONSOLE_LOGLEVEL_QUIET=1/g' "${KERNEL_PATH}/CONFIGS/xanmod/gcc/config_x86-64-v3"
+sed -i 's/CONFIG_MESSAGE_LOGLEVEL_DEFAULT=.*/CONFIG_MESSAGE_LOGLEVEL_DEFAULT=4/g' "${KERNEL_PATH}/CONFIGS/xanmod/gcc/config_x86-64-v3"
 
 # Copy the modified config
-cp "${WORKING_PATH}/templates/default-config" "${KERNEL_PATH}/.config"
+cp "${KERNEL_PATH}/CONFIGS/xanmod/gcc/config_x86-64-v3" "${KERNEL_PATH}/.config"
 
 # Disable debug info
 ./scripts/config --undefine GDB_SCRIPTS
