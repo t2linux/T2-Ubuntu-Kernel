@@ -152,4 +152,52 @@ jobs:
         with:
           github_token: ${{ secrets.PAT }}
           branch: Mainline-Xanmod
+  LTS_Xanmod:
+    runs-on: ubuntu-latest
+    steps:
 
+      - name: 'Checkout Repo'
+        uses: actions/checkout@v3
+        with:
+          ref: LTS-Xanmod
+          persist-credentials: false
+          fetch-depth: 0
+
+      - name: Check for update
+        id: publish
+        run: |
+          latestrelease=$(grep ^KERNEL_VERSION build.sh | head -n1| cut -d = -f2)
+          latestupstream=$(curl -A "Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101 Firefox/81.0" -sL https://xanmod.org/ | grep -A1 "Stable Real-time" | grep xanmod | cut -d ">" -f 3 | cut -d "-" -f 1)
+
+          latestpkgrel=$(grep "PKGREL=\d*" build.sh | cut -d = -f2)
+          latestpkgupstream=$(curl -A "Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101 Firefox/81.0" -sL https://xanmod.org/ | grep -A1 "Stable Real-time" | grep xanmod | cut -d ">" -f 3 | cut -d "-" -f 2)
+
+          echo "latestrelease: ${latestrelease}"
+          echo "latestupstream: ${latestupstream}"
+          echo "latestpkgrel: ${latestpkgrel}"
+          echo "latestpkgupstream: ${latestpkgupstream}"
+          
+          if [[ ( ${latestrelease} = ${latestupstream} ) && ( ${latestpkgrel} = ${latestpkgupstream} ) ]]
+          then
+            echo "publish=no" >> $GITHUB_ENV
+            exit 0
+          else
+            echo "publish=yes" >> $GITHUB_ENV
+            sed -i "s/${latestrelease}/${latestupstream}/g" ${{ github.workspace }}/build.sh
+            sed -i "s/PKGREL=.*/PKGREL=${latestpkgupstream}/g" ${{ github.workspace }}/build.sh
+            echo "ver=${latestupstream}-${latestpkgupstream}" >> $GITHUB_ENV
+          fi
+      - name: Update the repo
+        if: env.publish == 'yes'
+        id: clean
+        run: |
+          cd ${{ github.workspace }}
+          git config --local user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git config --local user.name "github-actions[bot]"
+          git commit -m "Update kernel to v${{ env.ver }}" -a
+      - name: Push changes to the repo
+        if: env.publish == 'yes'
+        uses: ad-m/github-push-action@master
+        with:
+          github_token: ${{ secrets.PAT }}
+          branch: LTS-Xanmod
