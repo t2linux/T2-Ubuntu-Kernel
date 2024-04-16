@@ -167,10 +167,10 @@ jobs:
         id: publish
         run: |
           latestrelease=$(grep ^KERNEL_VERSION build.sh | head -n1| cut -d = -f2)
-          latestupstream=$(curl -A "Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101 Firefox/81.0" -sL https://xanmod.org/ | grep -A1 "Stable Real-time" | grep xanmod | cut -d ">" -f 3 | cut -d "-" -f 1)
+          latestupstream=$(curl -A "Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101 Firefox/81.0" -sL https://xanmod.org/ | grep -A1 "Long Term Support" | grep xanmod | cut -d ">" -f 3 | cut -d "-" -f 1)
 
           latestpkgrel=$(grep "PKGREL=\d*" build.sh | cut -d = -f2)
-          latestpkgupstream=$(curl -A "Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101 Firefox/81.0" -sL https://xanmod.org/ | grep -A1 "Stable Real-time" | grep xanmod | cut -d ">" -f 3 | cut -d "-" -f 2)
+          latestpkgupstream=$(curl -A "Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101 Firefox/81.0" -sL https://xanmod.org/ | grep -A1 "Long Term Support" | grep xanmod | cut -d ">" -f 3 | cut -d "-" -f 2)
 
           echo "latestrelease: ${latestrelease}"
           echo "latestupstream: ${latestupstream}"
