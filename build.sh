@@ -9,8 +9,8 @@ export DEBIAN_FRONTEND=noninteractive
 apt-get update
 apt-get install -y lsb-release
 
-KERNEL_VERSION=6.6.25
-PKGREL=rt29
+KERNEL_VERSION=6.6.27
+PKGREL=xanmod1
 CODENAME=$(lsb_release -c | cut -d ":" -f 2 | xargs)
 
 #KERNEL_REPOSITORY=git://kernel.ubuntu.com/virgin/linux-stable.git
