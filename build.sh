@@ -50,12 +50,9 @@ git clone --depth 1 --single-branch --branch "v${KERNEL_VERSION}" \
 
 cd "${KERNEL_PATH}" || exit
 
-if [[ $USE_T2LINUX_REPO = false ]]
-then
 #### Create patch file with custom drivers
 echo >&2 "===]> Info: Creating patch file... "
 KERNEL_VERSION="${KERNEL_VERSION}" WORKING_PATH="${WORKING_PATH}" "${REPO_PATH}/patch_driver.sh"
-fi
 
 #### Apply patches
 cd "${KERNEL_PATH}" || exit
