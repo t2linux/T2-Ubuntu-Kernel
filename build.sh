@@ -2,13 +2,6 @@
 
 set -eu -o pipefail
 
-USE_T2LINUX_REPO=false
-if [[ ($USE_T2LINUX_REPO != true) && ($USE_T2LINUX_REPO != false) ]]
-then
-echo "Abort!"
-exit 1
-fi
-
 ### Environment variable
 export DEBIAN_FRONTEND=noninteractive
 
@@ -20,15 +13,9 @@ KERNEL_VERSION=6.8.6
 PKGREL=1
 CODENAME=$(lsb_release -c | cut -d ":" -f 2 | xargs)
 
-if [[ $USE_T2LINUX_REPO = true ]]
-then
-KERNEL_REPOSITORY=https://github.com/t2linux/kernel.git
-else
 #KERNEL_REPOSITORY=git://kernel.ubuntu.com/virgin/linux-stable.git
 KERNEL_REPOSITORY=https://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable.git
-fi
 
-#APPLE_BCE_REPOSITORY=https://github.com/kekrby/apple-bce.git
 REPO_PATH=$(pwd)
 WORKING_PATH=/root/work
 KERNEL_PATH="${WORKING_PATH}/linux-kernel"
@@ -58,23 +45,14 @@ apt-get install -y build-essential fakeroot libncurses-dev bison flex libssl-dev
   libcap-dev bc rsync cpio dh-modaliases debhelper kernel-wedge curl gawk dwarves zstd python3
 
 ### get Kernel and Drivers
-if [[ $USE_T2LINUX_REPO = true ]]
-then
-git clone --depth 1 --single-branch --branch "t2-v${KERNEL_VERSION}" \
-  "${KERNEL_REPOSITORY}" "${KERNEL_PATH}"
-else
 git clone --depth 1 --single-branch --branch "v${KERNEL_VERSION}" \
   "${KERNEL_REPOSITORY}" "${KERNEL_PATH}"
-fi
-#git clone --depth 1 "${APPLE_BCE_REPOSITORY}" "${KERNEL_PATH}/drivers/staging/apple-bce"
+
 cd "${KERNEL_PATH}" || exit
 
-if [[ $USE_T2LINUX_REPO = false ]]
-then
 #### Create patch file with custom drivers
 echo >&2 "===]> Info: Creating patch file... "
 KERNEL_VERSION="${KERNEL_VERSION}" WORKING_PATH="${WORKING_PATH}" "${REPO_PATH}/patch_driver.sh"
-fi
 
 #### Apply patches
 cd "${KERNEL_PATH}" || exit
@@ -138,8 +116,6 @@ make -j "$(getconf _NPROCESSORS_ONLN)" deb-pkg LOCALVERSION=-t2-"${CODENAME}" KD
 
 #### Copy artifacts to shared volume
 echo >&2 "===]> Info: Copying debs and calculating SHA256 ... "
-#cp -rfv ../*.deb "${REPO_PATH}/"
-#cp -rfv "${KERNEL_PATH}/.config" "${REPO_PATH}/kernel_config_${KERNEL_VERSION}"
 cp -rfv "${KERNEL_PATH}/.config" "/tmp/artifacts/kernel_config_${KERNEL_VERSION}-${CODENAME}"
 cp -rfv ../*.deb /tmp/artifacts/
 
