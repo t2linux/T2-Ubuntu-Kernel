@@ -165,7 +165,7 @@ jobs:
           echo Building $VERSION-$REL
           echo "tag=${VERSION}-${REL}" >> $GITHUB_OUTPUT
 
-          DOCKER_IMAGE=ubuntu:23.10
+          DOCKER_IMAGE=ubuntu:24.04
           docker pull ${DOCKER_IMAGE}
           docker run \
           -t \
