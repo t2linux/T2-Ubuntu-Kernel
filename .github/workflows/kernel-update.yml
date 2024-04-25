@@ -12,7 +12,7 @@ jobs:
     steps:
 
       - name: 'Checkout Repo'
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
         with:
           persist-credentials: false
           fetch-depth: 0
@@ -52,7 +52,7 @@ jobs:
     steps:
 
       - name: 'Checkout Repo'
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
         with:
           ref: LTS
           persist-credentials: false
@@ -94,7 +94,7 @@ jobs:
     steps:
 
       - name: 'Checkout Repo'
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
         with:
           ref: Mainline-Xanmod
           persist-credentials: false
@@ -157,7 +157,7 @@ jobs:
     steps:
 
       - name: 'Checkout Repo'
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
         with:
           ref: LTS-Xanmod
           persist-credentials: false
