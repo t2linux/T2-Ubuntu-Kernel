@@ -43,7 +43,7 @@ Firstly add the [t2-ubuntu-repo](https://adityagarg8.github.io/t2-ubuntu-repo/) 
 
     You can also run `lsb_release -a` to identify your codename.
 
-3. Run the following (taking `noble` as the example, just replace it with your release codename in the first line):
+2. Run the following (taking `noble` as the example, just replace it with your release codename in the first line):
 
 ```bash
 CODENAME=noble
