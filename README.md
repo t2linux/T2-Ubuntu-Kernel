@@ -39,12 +39,14 @@ Firstly add the [t2-ubuntu-repo](https://adityagarg8.github.io/t2-ubuntu-repo/) 
 
     b) `mantic` for **Ubuntu 23.10**
 
+    c) `noble` for **Ubuntu 24.04**
+
     You can also run `lsb_release -a` to identify your codename.
 
-2. Run the following (taking `jammy` as the example, just replace it with your release codename in the first line):
+2. Run the following (taking `noble` as the example, just replace it with your release codename in the first line):
 
 ```bash
-CODENAME=jammy
+CODENAME=noble
 curl -s --compressed "https://adityagarg8.github.io/t2-ubuntu-repo/KEY.gpg" | gpg --dearmor | sudo tee /etc/apt/trusted.gpg.d/t2-ubuntu-repo.gpg >/dev/null
 sudo curl -s --compressed -o /etc/apt/sources.list.d/t2.list "https://adityagarg8.github.io/t2-ubuntu-repo/t2.list"
 echo "deb [signed-by=/etc/apt/trusted.gpg.d/t2-ubuntu-repo.gpg] https://github.com/AdityaGarg8/t2-ubuntu-repo/releases/download/${CODENAME} ./" | sudo tee -a /etc/apt/sources.list.d/t2.list
