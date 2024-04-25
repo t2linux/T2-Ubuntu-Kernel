@@ -67,7 +67,7 @@ jobs:
 
       - name: Release
         if: github.ref == 'refs/heads/LTS'
-        uses: softprops/action-gh-release@v1
+        uses: softprops/action-gh-release@v2
         with:
           files: |
             /tmp/artifacts/sha256*
@@ -130,7 +130,7 @@ jobs:
 
       - name: Release
         if: github.ref == 'refs/heads/LTS'
-        uses: softprops/action-gh-release@v1
+        uses: softprops/action-gh-release@v2
         with:
           files: |
             /tmp/artifacts/sha256*
@@ -193,7 +193,7 @@ jobs:
 
       - name: Release
         if: github.ref == 'refs/heads/LTS'
-        uses: softprops/action-gh-release@v1
+        uses: softprops/action-gh-release@v2
         with:
           files: |
             /tmp/artifacts/sha256*
