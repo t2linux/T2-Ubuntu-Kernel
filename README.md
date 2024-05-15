@@ -1,16 +1,14 @@
-# T2 Ubuntu Kernel
+# T2 Debian and Ubuntu Kernel
 
-Ubuntu/Mint kernel with Apple T2 patches built-in. This repo will try to keep up with kernel new releases.
+Debian and Ubuntu/Mint kernel with Apple T2 patches built-in. This repo will try to keep up with kernel new releases.
 
-**Note for Debian users :-** Since Debian doesn't support the kernels released in this repo, Debian users are suggested to use [this fork](https://github.com/andersfugmann/T2-Debian-Kernel) to get compatible kernels.
-
-![Build Kernel Package](https://github.com/t2linux/T2-Ubuntu-Kernel/actions/workflows/kernel.yml/badge.svg?branch=LTS)
+![Build Kernel Package](https://github.com/t2linux/T2-Debian-and-Ubuntu-Kernel/actions/workflows/kernel.yml/badge.svg?branch=LTS)
 
 This project is closely inspired by mikeeq/mbp-fedora-kernel and marcosfad/mbp-ubuntu-kernel. Thank you @mikeeq and @marcosfad for the scripts and setup.
 
 Special thanks to @Redecorating for the CI.
 
-**If this repo helped you in any way, consider inviting a coffee to the people in the [credits](https://github.com/t2linux/T2-Ubuntu-Kernel#credits) (links given [here](https://wiki.t2linux.org/contribute/)).**
+**If this repo helped you in any way, consider inviting a coffee to the people in the [credits](https://github.com/t2linux/T2-Debian-and-Ubuntu-Kernel#credits) (links given [here](https://wiki.t2linux.org/contribute/)).**
 
 ## Pre installation steps
 
@@ -40,6 +38,8 @@ Firstly add the [t2-ubuntu-repo](https://adityagarg8.github.io/t2-ubuntu-repo/) 
     b) `mantic` for **Ubuntu 23.10**
 
     c) `noble` for **Ubuntu 24.04**
+
+    d) `bookworm` for **Debian 12**
 
     You can also run `lsb_release -a` to identify your codename.
 
@@ -88,7 +88,7 @@ Simply replace `linux-t2-lts` in the above command with the kernel variant you w
 
 ### Download package manually
 
-Download the .deb packages of **linux-headers** and **linux-image** of the kernel you wish to install from the [releases](https://github.com/t2linux/T2-Ubuntu-Kernel/releases) section.
+Download the .deb packages of **linux-headers** and **linux-image** of the kernel you wish to install from the [releases](https://github.com/t2linux/T2-Debian-and-Ubuntu-Kernel/releases) section.
 
 Install **linux-headers** first and then **linux-image** using `apt` and restart your Mac. In case you do not know how to do so, follow the instructions given below. Else you are good to go.
 
@@ -102,13 +102,13 @@ Restart your Mac.
 
 Clone the repo using
 ```bash
-git clone https://github.com/t2linux/T2-Ubuntu-Kernel
+git clone https://github.com/t2linux/T2-Debian-and-Ubuntu-Kernel
 ```
 
 Open a terminal window and run
 
 ```bash
-cd T2-Ubuntu-Kernel
+cd T2-Debian-and-Ubuntu-Kernel
 sudo ./build.sh
 ```
 
