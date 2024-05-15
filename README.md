@@ -2,7 +2,7 @@
 
 Debian and Ubuntu/Mint kernel with Apple T2 patches built-in. This repo will try to keep up with kernel new releases.
 
-![Build Kernel Package](https://github.com/t2linux/T2-Ubuntu-Kernel/actions/workflows/kernel.yml/badge.svg?branch=Mainline)
+![Build Kernel Package](https://github.com/t2linux/T2-Debian-and-Ubuntu-Kernel/actions/workflows/kernel.yml/badge.svg?branch=Mainline)
 
 This project is closely inspired by mikeeq/mbp-fedora-kernel and marcosfad/mbp-ubuntu-kernel. Thank you @mikeeq and @marcosfad for the scripts and setup.
 
@@ -88,7 +88,7 @@ Simply replace `linux-t2-lts` in the above command with the kernel variant you w
 
 ### Download package manually
 
-Download the .deb packages of **linux-headers** and **linux-image** of the kernel you wish to install from the [releases](https://github.com/t2linux/T2-Ubuntu-Kernel/releases) section.
+Download the .deb packages of **linux-headers** and **linux-image** of the kernel you wish to install from the [releases](https://github.com/t2linux/T2-Debian-and-Ubuntu-Kernel/releases) section.
 
 Install **linux-headers** first and then **linux-image** using `apt` and restart your Mac. In case you do not know how to do so, follow the instructions given below. Else you are good to go.
 
