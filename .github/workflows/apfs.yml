@@ -69,7 +69,7 @@ jobs:
             mkdir DEBIAN
             cd DEBIAN
 
-            echo "Package: linux-apfs" > control
+            echo "Package: apfs-dkms" > control
             echo "Version: ${NEW_RELEASE_VER}" >> control
             echo "Maintainer: Aditya Garg" >> control
             echo "Architecture: amd64" >> control
