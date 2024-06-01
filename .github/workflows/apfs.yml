@@ -46,14 +46,14 @@ jobs:
             exit 0
           else
             echo "publish=yes" >> $GITHUB_ENV
-            RELEASE_VER_MAIN=$(echo ${RELEASE_VER} | cut -d "." -f 1,2,3)
+            RELEASE_VER_MAIN=$(echo ${RELEASE_VER} | cut -d "-" -f 1)
             if [[ ${RELEASE_VER_MAIN} != ${DKMS_VER} ]]
             then
-              NEW_RELEASE_VER=${DKMS_VER}.0
+              NEW_RELEASE_VER=${DKMS_VER}-1
             else
-              RELEASE_VER_SUB=$(echo ${RELEASE_VER} | cut -d "." -f 4)
+              RELEASE_VER_SUB=$(echo ${RELEASE_VER} | cut -d "-" -f 2)
               NEW_RELEASE_VER_SUB=$((${RELEASE_VER_SUB} + 1))
-              NEW_RELEASE_VER=${DKMS_VER}.${NEW_RELEASE_VER_SUB}  
+              NEW_RELEASE_VER=${DKMS_VER}-${NEW_RELEASE_VER_SUB}  
             fi
             echo "ver=${NEW_RELEASE_VER}" >> $GITHUB_ENV
             cd ${{ github.workspace }}
