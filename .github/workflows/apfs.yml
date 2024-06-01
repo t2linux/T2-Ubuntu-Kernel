@@ -72,7 +72,7 @@ jobs:
             echo "Package: apfs-dkms" > control
             echo "Version: ${NEW_RELEASE_VER}" >> control
             echo "Maintainer: Aditya Garg" >> control
-            echo "Architecture: amd64" >> control
+            echo "Architecture: all" >> control
             echo "Description: Apple File System driver for Linux" >> control
             echo "Depends: dkms" >> control
 
