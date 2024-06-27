@@ -7,7 +7,7 @@ BUILD_PATH=/tmp/build-kernel
 # Patches
 T2_PATCHES_GIT_URL=https://github.com/t2linux/linux-t2-patches.git
 T2_PATCHES_BRANCH_NAME=main
-T2_PATCHES_COMMIT_HASH=HEAD
+T2_PATCHES_COMMIT_HASH=0ad2b3913f5484ba8e86b6965f5d88903464261d
 
 rm -rf "${BUILD_PATH}"
 mkdir -p "${BUILD_PATH}"
