@@ -18,6 +18,8 @@ git clone --single-branch --branch ${T2_PATCHES_BRANCH_NAME} ${T2_PATCHES_GIT_UR
   "${BUILD_PATH}/linux-mbp-arch"
 cd "${BUILD_PATH}/linux-mbp-arch" || exit
 git checkout ${T2_PATCHES_COMMIT_HASH}
+rm 1017*
+wget https://raw.githubusercontent.com/t2linux/linux-t2-patches/main/1017-HID-apple-Add-support-for-magic-keyboard-backlight-o.patch
 
 while IFS= read -r file; do
   echo "==> Adding ${file}"
