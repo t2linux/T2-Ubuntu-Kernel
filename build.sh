@@ -10,7 +10,7 @@ apt-get update
 apt-get install -y lsb-release
 
 KERNEL_VERSION=6.6.36
-PKGREL=1
+PKGREL=2
 CODENAME=$(lsb_release -c | cut -d ":" -f 2 | xargs)
 
 #KERNEL_REPOSITORY=git://kernel.ubuntu.com/virgin/linux-stable.git
@@ -106,7 +106,6 @@ make olddefconfig
 ./scripts/config --module CONFIG_HID_APPLETB_BL
 ./scripts/config --module CONFIG_HID_APPLETB_KBD
 ./scripts/config --module CONFIG_DRM_APPLETBDRM
-./scripts/config --module CONFIG_HID_APPLE_MAGIC_BACKLIGHT
 ./scripts/config --module CONFIG_APFS_FS
 
 # Get rid of the dirty tag
