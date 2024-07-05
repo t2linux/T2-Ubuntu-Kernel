@@ -65,6 +65,13 @@ jobs:
           name: linux-T2-${{ steps.build.outputs.tag }}-jammy
           path: /tmp/artifacts/*
 
+      - name: Create tag
+        if: github.ref == 'refs/heads/Mainline'
+        uses: rickstaa/action-create-tag@v1
+        with:
+          tag_exists_error: false
+          tag: "v${{ steps.build.outputs.tag }}"
+
       - name: Release
         if: github.ref == 'refs/heads/Mainline'
         uses: softprops/action-gh-release@v2
@@ -128,6 +135,13 @@ jobs:
           name: linux-T2-${{ steps.build.outputs.tag }}-mantic
           path: /tmp/artifacts/*
 
+      - name: Create tag
+        if: github.ref == 'refs/heads/Mainline'
+        uses: rickstaa/action-create-tag@v1
+        with:
+          tag_exists_error: false
+          tag: "v${{ steps.build.outputs.tag }}"
+
       - name: Release
         if: github.ref == 'refs/heads/Mainline'
         uses: softprops/action-gh-release@v2
@@ -190,6 +204,13 @@ jobs:
         with:
           name: linux-T2-${{ steps.build.outputs.tag }}-noble
           path: /tmp/artifacts/*
+
+      - name: Create tag
+        if: github.ref == 'refs/heads/Mainline'
+        uses: rickstaa/action-create-tag@v1
+        with:
+          tag_exists_error: false
+          tag: "v${{ steps.build.outputs.tag }}"
 
       - name: Release
         if: github.ref == 'refs/heads/Mainline'
