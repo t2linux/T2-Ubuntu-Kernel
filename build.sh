@@ -105,8 +105,7 @@ make olddefconfig
 # Enable T2 drivers
 ./scripts/config --module CONFIG_HID_APPLETB_BL
 ./scripts/config --module CONFIG_HID_APPLETB_KBD
-./scripts/config --module CONFIG_DRM_APPLETBDRM
-./scripts/config --module CONFIG_HID_APPLE_MAGIC_BACKLIGHT
+./scripts/config --module CONFIG_DRM_APPLETBDR
 ./scripts/config --module CONFIG_APFS_FS
 
 # Get rid of the dirty tag
