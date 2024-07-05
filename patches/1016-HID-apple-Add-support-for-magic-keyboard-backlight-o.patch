@@ -1,26 +1,27 @@
-From 406aac3e29b2886a279c3ee51cae7e6475927f0d Mon Sep 17 00:00:00 2001
+From 394ba612f9419ec5bfebbffb72212fd3b2094986 Mon Sep 17 00:00:00 2001
 From: Orlando Chamberlain <orlandoch.dev@gmail.com>
-Date: Mon, 1 Jul 2024 10:45:25 +0000
-Subject: [PATCH 1/1] HID: apple: Add support for magic keyboard backlight on
- T2 Macs
+Date: Wed, 3 Jul 2024 17:54:11 +0000
+Subject: HID: apple: Add support for magic keyboard backlight on T2 Macs
 
 Unlike T2 Macs with Butterfly keyboard, who have their keyboard backlight
 on the USB device the T2 Macs with Magic keyboard have their backlight on
 the Touchbar backlight device (05ac:8102).
 
 Support for Butterfly keyboards has already been added in
-commit 9018eacbe623 ("HID: apple: Add support for keyboard backlight on certain T2 Macs.").
-This patch adds support for the Magic keyboards.
+commit 9018eacbe623 ("HID: apple: Add support for keyboard backlight on
+certain T2 Macs.") This patch adds support for the Magic keyboards.
 
+Signed-off-by: Orlando Chamberlain <orlandoch.dev@gmail.com>
 Co-developed-by: Aditya Garg <gargaditya08@live.com>
 Signed-off-by: Aditya Garg <gargaditya08@live.com>
-Signed-off-by: Orlando Chamberlain <orlandoch.dev@gmail.com>
+Link: https://patch.msgid.link/E1D444EA-7FD0-42DA-B198-50B0F03298FB@live.com
+Signed-off-by: Benjamin Tissoires <bentiss@kernel.org>
 ---
- drivers/hid/hid-apple.c | 87 ++++++++++++++++++++++++++++++++++++++++-
- 1 file changed, 86 insertions(+), 1 deletion(-)
+ drivers/hid/hid-apple.c | 87 +++++++++++++++++++++++++++++++++++++++++++++++++
+ 1 file changed, 87 insertions(+)
 
 diff --git a/drivers/hid/hid-apple.c b/drivers/hid/hid-apple.c
-index bd022e004356..2d1cd4456303 100644
+index bd022e0043569c..6dedb84d7cc397 100644
 --- a/drivers/hid/hid-apple.c
 +++ b/drivers/hid/hid-apple.c
 @@ -8,6 +8,8 @@
@@ -40,13 +41,11 @@ index bd022e004356..2d1cd4456303 100644
  
  #include "hid-ids.h"
  
-@@ -37,13 +40,18 @@
- #define APPLE_NUMLOCK_EMULATION	BIT(8)
+@@ -38,12 +41,17 @@
  #define APPLE_RDESC_BATTERY	BIT(9)
  #define APPLE_BACKLIGHT_CTL	BIT(10)
--#define APPLE_IS_NON_APPLE	BIT(11)
-+#define APPLE_MAGIC_BACKLIGHT	BIT(11)
-+#define APPLE_IS_NON_APPLE	BIT(12)
+ #define APPLE_IS_NON_APPLE	BIT(11)
++#define APPLE_MAGIC_BACKLIGHT	BIT(12)
  
  #define APPLE_FLAG_FKEY		0x01
  
@@ -73,7 +72,7 @@ index bd022e004356..2d1cd4456303 100644
  struct apple_sc {
  	struct hid_device *hdev;
  	unsigned long quirks;
-@@ -822,6 +836,66 @@ static int apple_backlight_init(struct hid_device *hdev)
+@@ -822,6 +836,66 @@ cleanup_and_exit:
  	return ret;
  }
  
@@ -107,6 +106,7 @@ index bd022e004356..2d1cd4456303 100644
 +static int apple_magic_backlight_init(struct hid_device *hdev)
 +{
 +	struct apple_magic_backlight *backlight;
++	struct hid_report_enum *report_enum;
 +
 +	/*
 +	 * Ensure this usb endpoint is for the keyboard backlight, not touchbar
@@ -119,10 +119,9 @@ index bd022e004356..2d1cd4456303 100644
 +	if (!backlight)
 +		return -ENOMEM;
 +
-+	backlight->brightness = hid_register_report(hdev, HID_FEATURE_REPORT,
-+			APPLE_MAGIC_REPORT_ID_BRIGHTNESS, 0);
-+	backlight->power = hid_register_report(hdev, HID_FEATURE_REPORT,
-+			APPLE_MAGIC_REPORT_ID_POWER, 0);
++	report_enum = &hdev->report_enum[HID_FEATURE_REPORT];
++	backlight->brightness = report_enum->report_id_hash[APPLE_MAGIC_REPORT_ID_BRIGHTNESS];
++	backlight->power = report_enum->report_id_hash[APPLE_MAGIC_REPORT_ID_POWER];
 +
 +	if (!backlight->brightness || !backlight->power)
 +		return -ENODEV;
@@ -140,23 +139,26 @@ index bd022e004356..2d1cd4456303 100644
  static int apple_probe(struct hid_device *hdev,
  		const struct hid_device_id *id)
  {
-@@ -860,6 +934,15 @@ static int apple_probe(struct hid_device *hdev,
+@@ -860,7 +934,18 @@ static int apple_probe(struct hid_device *hdev,
  	if (quirks & APPLE_BACKLIGHT_CTL)
  		apple_backlight_init(hdev);
  
 +	if (quirks & APPLE_MAGIC_BACKLIGHT) {
 +		ret = apple_magic_backlight_init(hdev);
-+		if (ret) {
-+			del_timer_sync(&asc->battery_timer);
-+			hid_hw_stop(hdev);
-+			return ret;
-+		}
++		if (ret)
++			goto out_err;
 +	}
 +
  	return 0;
++
++out_err:
++	del_timer_sync(&asc->battery_timer);
++	hid_hw_stop(hdev);
++	return ret;
  }
  
-@@ -1073,6 +1156,8 @@ static const struct hid_device_id apple_devices[] = {
+ static void apple_remove(struct hid_device *hdev)
+@@ -1073,6 +1158,8 @@ static const struct hid_device_id apple_devices[] = {
  		.driver_data = APPLE_HAS_FN | APPLE_ISO_TILDE_QUIRK | APPLE_RDESC_BATTERY },
  	{ HID_BLUETOOTH_DEVICE(BT_VENDOR_ID_APPLE, USB_DEVICE_ID_APPLE_MAGIC_KEYBOARD_NUMPAD_2021),
  		.driver_data = APPLE_HAS_FN | APPLE_ISO_TILDE_QUIRK },
@@ -166,5 +168,5 @@ index bd022e004356..2d1cd4456303 100644
  	{ }
  };
 -- 
-2.45.2
+cgit 1.2.3-korg
 
