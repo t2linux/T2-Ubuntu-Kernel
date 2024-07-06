@@ -10,6 +10,7 @@ jobs:
 
       - name: Get kconfig
         run: |
+          mkdir /tmp/artifacts
           sudo apt update
           wget https://raw.githubusercontent.com/pimlie/ubuntu-mainline-kernel.sh/master/ubuntu-mainline-kernel.sh
           chmod +x ubuntu-mainline-kernel.sh
@@ -21,7 +22,7 @@ jobs:
           newsub=$((${sub} - 1)) &&
           newlatest=${main}.${newsub} &&
           sudo sed -i "s/version=.*/version=v${newlatest}/g" /usr/local/bin/ubuntu-mainline-kernel.sh &&
-          sudo ubuntu-mainline-kernel.sh -i --yes)
+          sudo ubuntu-mainline-kernel.sh -i --yes) || echo "Failed"
 
           LTS_VER=6.6
           latestupstream=$(curl -sL https://kernel.org/ | grep ${LTS_VER} | grep tar.xz | cut -d "/" -f 8 | cut -d "\"" -f 1 | cut -d "-" -f 2 | rev | cut -c 8- | rev)
@@ -32,8 +33,20 @@ jobs:
           newsub=$((${sub} - 1)) &&
           newlatest=${main}.${newsub} &&
           sudo sed -i "s/version=.*/version=v${newlatest}/g" /usr/local/bin/ubuntu-mainline-kernel.sh &&
-          sudo ubuntu-mainline-kernel.sh -i --yes)
-          mkdir /tmp/artifacts
+          sudo ubuntu-mainline-kernel.sh -i --yes) || echo "Failed"
+
+          DOCKER_IMAGE=debian:unstable
+          docker pull ${DOCKER_IMAGE}
+          docker run \
+          -t \
+          -v "$(pwd)":/repo \
+          ${DOCKER_IMAGE} \
+          /bin/bash -c 'echo "deb http://ftp.debian.org/debian/ experimental main non-free non-free-firmware contrib" >> /etc/apt/sources.list.d/experimental.list && \
+          apt-get update && \
+          apt-get install -t experimental -y linux-image-amd64 && \
+          mkdir /repo/configs
+          cp -r /boot/config* /repo/configs'
+          cp -r "$(pwd)"/configs/* /tmp/artifacts
           cp -r /boot/config* /tmp/artifacts
       - name: Upload package artifact
         uses: actions/upload-artifact@v4
