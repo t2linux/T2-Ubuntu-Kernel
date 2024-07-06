@@ -11,7 +11,15 @@ apt-get install -y lsb-release
 
 KERNEL_VERSION=6.9.8
 PKGREL=2
+DISTRO=$(lsb_release -i | cut -d ":" -f 2 | xargs)
 CODENAME=$(lsb_release -c | cut -d ":" -f 2 | xargs)
+
+if [[ ${DISTRO} = Debian ]]
+then
+CONFIG=debian
+else
+CONFIG=ubuntu
+fi
 
 #KERNEL_REPOSITORY=git://kernel.ubuntu.com/virgin/linux-stable.git
 KERNEL_REPOSITORY=https://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable.git
@@ -22,6 +30,7 @@ KERNEL_PATH="${WORKING_PATH}/linux-kernel"
 
 ### Debug commands
 echo "Kernel version: ${KERNEL_VERSION}"
+echo "Config distro: ${CONFIG}"
 echo "Working path: ${WORKING_PATH}"
 echo "Kernel repository: ${KERNEL_REPOSITORY}"
 echo "Current path: ${REPO_PATH}"
@@ -79,17 +88,17 @@ cd "${KERNEL_PATH}"
 make clean
 
 # Make config friendly with vanilla kernel
-sed -i 's/CONFIG_VERSION_SIGNATURE=.*/CONFIG_VERSION_SIGNATURE=""/g' "${WORKING_PATH}/templates/default-config"
-sed -i 's/CONFIG_SYSTEM_TRUSTED_KEYS=.*/CONFIG_SYSTEM_TRUSTED_KEYS=""/g' "${WORKING_PATH}/templates/default-config"
-sed -i 's/CONFIG_SYSTEM_REVOCATION_KEYS=.*/CONFIG_SYSTEM_REVOCATION_KEYS=""/g' "${WORKING_PATH}/templates/default-config"
+sed -i 's/CONFIG_VERSION_SIGNATURE=.*/CONFIG_VERSION_SIGNATURE=""/g' "${WORKING_PATH}/templates/default-config-${CONFIG}"
+sed -i 's/CONFIG_SYSTEM_TRUSTED_KEYS=.*/CONFIG_SYSTEM_TRUSTED_KEYS=""/g' "${WORKING_PATH}/templates/default-config-${CONFIG}"
+sed -i 's/CONFIG_SYSTEM_REVOCATION_KEYS=.*/CONFIG_SYSTEM_REVOCATION_KEYS=""/g' "${WORKING_PATH}/templates/default-config-${CONFIG}"
 
 # I want silent boot
-sed -i 's/CONFIG_CONSOLE_LOGLEVEL_DEFAULT=.*/CONFIG_CONSOLE_LOGLEVEL_DEFAULT=4/g' "${WORKING_PATH}/templates/default-config"
-sed -i 's/CONFIG_CONSOLE_LOGLEVEL_QUIET=.*/CONFIG_CONSOLE_LOGLEVEL_QUIET=1/g' "${WORKING_PATH}/templates/default-config"
-sed -i 's/CONFIG_MESSAGE_LOGLEVEL_DEFAULT=.*/CONFIG_MESSAGE_LOGLEVEL_DEFAULT=4/g' "${WORKING_PATH}/templates/default-config"
+sed -i 's/CONFIG_CONSOLE_LOGLEVEL_DEFAULT=.*/CONFIG_CONSOLE_LOGLEVEL_DEFAULT=4/g' "${WORKING_PATH}/templates/default-config-${CONFIG}"
+sed -i 's/CONFIG_CONSOLE_LOGLEVEL_QUIET=.*/CONFIG_CONSOLE_LOGLEVEL_QUIET=1/g' "${WORKING_PATH}/templates/default-config-${CONFIG}"
+sed -i 's/CONFIG_MESSAGE_LOGLEVEL_DEFAULT=.*/CONFIG_MESSAGE_LOGLEVEL_DEFAULT=4/g' "${WORKING_PATH}/templates/default-config-${CONFIG}"
 
 # Copy the modified config
-cp "${WORKING_PATH}/templates/default-config" "${KERNEL_PATH}/.config"
+cp -v "${WORKING_PATH}/templates/default-config-${CONFIG}" "${KERNEL_PATH}/.config"
 
 # Disable debug info
 ./scripts/config --undefine GDB_SCRIPTS

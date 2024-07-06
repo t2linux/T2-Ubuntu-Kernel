@@ -28,8 +28,30 @@ jobs:
         run: |
           yamllint -c ${{ github.workspace }}/.github/workflows/.ymllint .
           shellcheck ./*.sh
-  Build-Jammy:
+  Create-tag:
     needs: [Lint]
+    runs-on: ubuntu-22.04
+    steps:
+      - name: 'Checkout Repo'
+        uses: actions/checkout@v4
+
+      - name: Build script
+        id: build
+        run: |
+          mkdir /tmp/artifacts
+          VERSION=$(grep ^KERNEL_VERSION build.sh | head -n1| cut -d = -f2)
+          REL=$(grep "PKGREL=\d*" build.sh | cut -d = -f2)
+          #REL=$( git tag |grep -F $VERSION|sort -r|head -n1|tr -d v)
+          echo Building $VERSION-$REL
+          echo "tag=${VERSION}-${REL}" >> $GITHUB_OUTPUT
+
+      - name: Create tag
+        if: github.ref == 'refs/heads/Mainline'
+        uses: rickstaa/action-create-tag@v1
+        with:
+          tag: "v${{ steps.build.outputs.tag }}"
+  Build-Jammy:
+    needs: [Create-tag]
     runs-on: ubuntu-22.04
     steps:
       - name: Free up disk space for the CI
@@ -65,13 +87,6 @@ jobs:
           name: linux-T2-${{ steps.build.outputs.tag }}-jammy
           path: /tmp/artifacts/*
 
-      - name: Create tag
-        if: github.ref == 'refs/heads/Mainline'
-        uses: rickstaa/action-create-tag@v1
-        with:
-          tag_exists_error: false
-          tag: "v${{ steps.build.outputs.tag }}"
-
       - name: Release
         if: github.ref == 'refs/heads/Mainline'
         uses: softprops/action-gh-release@v2
@@ -86,7 +101,7 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
   Build-Mantic:
-    needs: [Lint]
+    needs: [Create-tag]
     runs-on: ubuntu-22.04
     steps:
       - name: Free up disk space for the CI
@@ -135,13 +150,6 @@ jobs:
           name: linux-T2-${{ steps.build.outputs.tag }}-mantic
           path: /tmp/artifacts/*
 
-      - name: Create tag
-        if: github.ref == 'refs/heads/Mainline'
-        uses: rickstaa/action-create-tag@v1
-        with:
-          tag_exists_error: false
-          tag: "v${{ steps.build.outputs.tag }}"
-
       - name: Release
         if: github.ref == 'refs/heads/Mainline'
         uses: softprops/action-gh-release@v2
@@ -156,7 +164,7 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
   Build-Noble:
-    needs: [Lint]
+    needs: [Create-tag]
     runs-on: ubuntu-22.04
     steps:
       - name: Free up disk space for the CI
@@ -205,13 +213,6 @@ jobs:
           name: linux-T2-${{ steps.build.outputs.tag }}-noble
           path: /tmp/artifacts/*
 
-      - name: Create tag
-        if: github.ref == 'refs/heads/Mainline'
-        uses: rickstaa/action-create-tag@v1
-        with:
-          tag_exists_error: false
-          tag: "v${{ steps.build.outputs.tag }}"
-
       - name: Release
         if: github.ref == 'refs/heads/Mainline'
         uses: softprops/action-gh-release@v2
@@ -226,7 +227,7 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
   Build-Bookworm:
-    needs: [Lint]
+    needs: [Create-tag]
     runs-on: ubuntu-22.04
     steps:
       - name: Free up disk space for the CI
@@ -274,13 +275,6 @@ jobs:
         with:
           name: linux-T2-${{ steps.build.outputs.tag }}-bookworm
           path: /tmp/artifacts/*
-
-      - name: Create tag
-        if: github.ref == 'refs/heads/Mainline'
-        uses: rickstaa/action-create-tag@v1
-        with:
-          tag_exists_error: false
-          tag: "v${{ steps.build.outputs.tag }}"
 
       - name: Release
         if: github.ref == 'refs/heads/Mainline'
