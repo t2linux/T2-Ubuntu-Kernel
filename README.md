@@ -20,11 +20,11 @@ Firstly add the [t2-ubuntu-repo](https://adityagarg8.github.io/t2-ubuntu-repo/) 
   
     a) `jammy` for **Ubuntu 22.04**
 
-    b) `mantic` for **Ubuntu 23.10**
+    b) `noble` for **Ubuntu 24.04**
 
-    c) `noble` for **Ubuntu 24.04**
+    c) `bookworm` for **Debian 12**
 
-    d) `bookworm` for **Debian 12**
+    d) `sid` for **Debian unstable**
 
     You can also run `lsb_release -a` to identify your codename.
 
