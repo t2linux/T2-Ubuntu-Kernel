@@ -58,6 +58,22 @@ Currently, 2 types of kernel variants are available. You can use anyone as per y
     sudo apt install linux-t2-lts
     ```
 
+3. Mainline Xanmod kernels:
+
+    If you want to install **Mainline Xanmod** kernels, install `linux-t2-xanmod` package:
+
+    ```bash
+    sudo apt install linux-t2-xanmod
+    ```
+
+4. LTS Xanmod kernels:
+
+    If you want to install **LTS Xanmod** kernels, install `linux-t2-xanmod-lts` package:
+
+    ```bash
+    sudo apt install linux-t2-xanmod-lts
+    ```
+
 Now, whenever a new kernel is released, you can use **Software updater** or run `sudo apt upgrade` to get it.
 
 #### Changing kernel variant:
