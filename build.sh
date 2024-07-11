@@ -106,6 +106,7 @@ make olddefconfig
 ./scripts/config --module CONFIG_HID_APPLETB_BL
 ./scripts/config --module CONFIG_HID_APPLETB_KBD
 ./scripts/config --module CONFIG_DRM_APPLETBDR
+./scripts/config --module CONFIG_BT_HCIBCM4377
 ./scripts/config --module CONFIG_APFS_FS
 
 # Get rid of the dirty tag
