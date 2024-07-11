@@ -42,7 +42,7 @@ rm -rf "${KERNEL_PATH}"
 ### Dependencies
 apt-get install -y build-essential fakeroot libncurses-dev bison flex libssl-dev libelf-dev \
   openssl dkms libudev-dev libpci-dev libiberty-dev autoconf wget xz-utils git \
-  libcap-dev bc rsync cpio dh-modaliases debhelper kernel-wedge curl gawk dwarves zstd python3
+  libcap-dev bc rsync cpio debhelper kernel-wedge curl gawk dwarves zstd python3
 
 ### get Kernel and Drivers
 git clone --depth 1 --single-branch --branch "${KERNEL_VERSION}-${PKGREL}" \
@@ -118,7 +118,7 @@ make -j "$(getconf _NPROCESSORS_ONLN)" deb-pkg LOCALVERSION=-t2-"${CODENAME}" KD
 
 #### Copy artifacts to shared volume
 echo >&2 "===]> Info: Copying debs and calculating SHA256 ... "
-cp -rfv "${KERNEL_PATH}/.config" "/tmp/artifacts/kernel_config_${KERNEL_VERSION}-${CODENAME}"
+cp -rfv "${KERNEL_PATH}/.config" "/tmp/artifacts/kernel_config_${KERNEL_VERSION}-${CODENAME}-xanmod"
 cp -rfv ../*.deb /tmp/artifacts/
 
 if [[ (${#KERNEL_VERSION} = 3) || (${#KERNEL_VERSION} = 4) ]]
@@ -127,4 +127,4 @@ mv "/tmp/artifacts/linux-libc-dev_${KERNEL_VERSION}.0-${PKGREL}_amd64.deb" "/tmp
 else
 mv "/tmp/artifacts/linux-libc-dev_${KERNEL_VERSION}-${PKGREL}_amd64.deb" "/tmp/artifacts/linux-libc-dev_${KERNEL_VERSION}-${PKGREL}-${CODENAME}_amd64.deb"
 fi
-sha256sum ../*.deb >/tmp/artifacts/sha256-"${CODENAME}"
+sha256sum ../*.deb >/tmp/artifacts/sha256-"${CODENAME}-xanmod"
