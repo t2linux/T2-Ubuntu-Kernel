@@ -107,6 +107,7 @@ make olddefconfig
 ./scripts/config --module CONFIG_HID_APPLETB_KBD
 ./scripts/config --module CONFIG_DRM_APPLETBDRM
 ./scripts/config --module CONFIG_APFS_FS
+./scripts/config --enable CONFIG_MODULE_FORCE_UNLOAD
 
 # Get rid of the dirty tag
 echo "" >"${KERNEL_PATH}"/.scmversion
