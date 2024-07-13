@@ -71,7 +71,7 @@ echo >&2 "===]> Info: Bulding src... "
 
 cd "${KERNEL_PATH}"
 
-./debian/scripts/misc/annotations -c CONFIG_HID_APPLETB_BL --arch amd64 --flavour generic --write m
+./debian/scripts/misc/annotations -c CONFIG_HID_APPLETB_BL --arch amd64 arm64 --flavour generic --write m
 ./debian/scripts/misc/annotations -c CONFIG_HID_APPLETB_KBD --arch amd64 --flavour generic --write m
 ./debian/scripts/misc/annotations -c CONFIG_DRM_APPLETBDRM --arch amd64 --flavour generic --write m
 ./debian/scripts/misc/annotations -c CONFIG_BT_HCIBCM4377 --arch amd64 --flavour generic --write m
@@ -81,8 +81,8 @@ cd "${KERNEL_PATH}"
 
 # Build Deb packages
 sed -i "s/${KERNEL_REL}-${UBUNTU_REL}/${KERNEL_REL}-${UBUNTU_REL}+t2/g" debian.master/changelog
-LANG=C fakeroot debian/rules clean updateconfigs
-LANG=C fakeroot debian/rules binary-headers binary-generic binary-perarch
+fakeroot debian/rules clean updateconfigs
+fakeroot debian/rules binary-headers binary-generic binary-perarch
 
 #### Copy artifacts to shared volume
 echo >&2 "===]> Info: Copying debs and calculating SHA256 ... "
