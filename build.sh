@@ -71,14 +71,13 @@ echo >&2 "===]> Info: Bulding src... "
 
 cd "${KERNEL_PATH}"
 
-alias annotations='./debian/scripts/misc/annotations'
-annotations -c CONFIG_HID_APPLETB_BL --arch amd64 --flavour generic --write m
-annotations -c CONFIG_HID_APPLETB_KBD --arch amd64 --flavour generic --write m
-annotations -c CONFIG_DRM_APPLETBDRM --arch amd64 --flavour generic --write m
-annotations -c CONFIG_BT_HCIBCM4377 --arch amd64 --flavour generic --write m
-annotations -c CONFIG_APPLE_BCE --arch amd64 --flavour generic --write m
-annotations -c CONFIG_APFS_FS --arch amd64 --flavour generic --write m
-annotations -c CONFIG_MODULE_FORCE_UNLOAD --arch amd64 --flavour generic --write y
+./debian/scripts/misc/annotations -c CONFIG_HID_APPLETB_BL --arch amd64 --flavour generic --write m
+./debian/scripts/misc/annotations -c CONFIG_HID_APPLETB_KBD --arch amd64 --flavour generic --write m
+./debian/scripts/misc/annotations -c CONFIG_DRM_APPLETBDRM --arch amd64 --flavour generic --write m
+./debian/scripts/misc/annotations -c CONFIG_BT_HCIBCM4377 --arch amd64 --flavour generic --write m
+./debian/scripts/misc/annotations -c CONFIG_APPLE_BCE --arch amd64 --flavour generic --write m
+./debian/scripts/misc/annotations -c CONFIG_APFS_FS --arch amd64 --flavour generic --write m
+./debian/scripts/misc/annotations -c CONFIG_MODULE_FORCE_UNLOAD --arch amd64 --flavour generic --write y
 
 fakeroot debian/rules clean updateconfigs
 
