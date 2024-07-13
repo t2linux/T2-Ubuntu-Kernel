@@ -79,11 +79,9 @@ cd "${KERNEL_PATH}"
 ./debian/scripts/misc/annotations -c CONFIG_APFS_FS --arch amd64 --flavour generic --write m
 ./debian/scripts/misc/annotations -c CONFIG_MODULE_FORCE_UNLOAD --arch amd64 --flavour generic --write y
 
-fakeroot debian/rules clean updateconfigs
-
 # Build Deb packages
 sed -i "s/${KERNEL_REL}-${UBUNTU_REL}/${KERNEL_REL}-${UBUNTU_REL}+t2/g" debian.master/changelog
-LANG=C fakeroot debian/rules clean
+LANG=C fakeroot debian/rules clean updateconfigs
 LANG=C fakeroot debian/rules binary-headers binary-generic binary-perarch
 
 #### Copy artifacts to shared volume
