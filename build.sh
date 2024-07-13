@@ -2,12 +2,12 @@
 
 set -eu -o pipefail
 
-KERNEL_REL=6.5.0
-UBUNTU_REL=10.10
+KERNEL_REL=6.8.0
+UBUNTU_REL=38.38
 PKGREL=1
 KERNEL_BRANCH="Ubuntu-${KERNEL_REL}-${UBUNTU_REL}"
 KERNEL_VERSION="${KERNEL_REL}-${UBUNTU_REL}-generic"
-KERNEL_REPOSITORY=git://git.launchpad.net/~ubuntu-kernel/ubuntu/+source/linux/+git/mantic
+KERNEL_REPOSITORY=git://git.launchpad.net/~ubuntu-kernel/ubuntu/+source/linux/+git/noble
 REPO_PATH=$(pwd)
 WORKING_PATH=/root/work
 KERNEL_PATH="${WORKING_PATH}/linux-kernel"
@@ -45,15 +45,13 @@ git clone --depth 1 --single-branch --branch "${KERNEL_BRANCH}" \
 cd "${KERNEL_PATH}" || exit
 
 #### Create patch file with custom drivers
-#echo >&2 "===]> Info: Creating patch file... "
-#KERNEL_VERSION="${KERNEL_VERSION}" WORKING_PATH="${WORKING_PATH}" "${REPO_PATH}/patch_driver.sh"
+echo >&2 "===]> Info: Creating patch file... "
+KERNEL_VERSION="${KERNEL_VERSION}" WORKING_PATH="${WORKING_PATH}" "${REPO_PATH}/patch_driver.sh"
 
 #### Apply patches
 cd "${KERNEL_PATH}" || exit
 
 echo >&2 "===]> Info: Applying patches... "
-rm -rf ${WORKING_PATH}/patches/200* # Probbaly will mess up iGPU switch!
-rm -rf ${WORKING_PATH}/patches/800* # Wifi patches are already in 6.5 
 [ ! -d "${WORKING_PATH}/patches" ] && {
   echo 'Patches directory not found!'
   exit 1
@@ -72,6 +70,17 @@ chmod a+x "${KERNEL_PATH}"/debian/scripts/misc/*
 echo >&2 "===]> Info: Bulding src... "
 
 cd "${KERNEL_PATH}"
+
+alias annotations='./debian/scripts/misc/annotations'
+annotations -c CONFIG_HID_APPLETB_BL --arch amd64 --flavour generic --write m
+annotations -c CONFIG_HID_APPLETB_KBD --arch amd64 --flavour generic --write m
+annotations -c CONFIG_DRM_APPLETBDRM --arch amd64 --flavour generic --write m
+annotations -c CONFIG_BT_HCIBCM4377 --arch amd64 --flavour generic --write m
+annotations -c CONFIG_APPLE_BCE --arch amd64 --flavour generic --write m
+annotations -c CONFIG_APFS_FS --arch amd64 --flavour generic --write m
+annotations -c CONFIG_MODULE_FORCE_UNLOAD --arch amd64 --flavour generic --write y
+
+fakeroot debian/rules clean updateconfigs
 
 # Build Deb packages
 sed -i "s/${KERNEL_REL}-${UBUNTU_REL}/${KERNEL_REL}-${UBUNTU_REL}+t2/g" debian.master/changelog

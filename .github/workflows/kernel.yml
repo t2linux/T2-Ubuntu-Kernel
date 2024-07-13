@@ -29,7 +29,7 @@ jobs:
           shellcheck ./*.sh
   build:
     needs: [lint]
-    runs-on: ubuntu-22.04
+    runs-on: ubuntu-latest
     steps:
       - name: Free up disk space for the CI
         uses: AdityaGarg8/remove-unwanted-software@v1
@@ -51,7 +51,7 @@ jobs:
           sed -i "s/REL/${KREL}-${UREL}/g" \
           ${{ github.workspace }}/.github/workflows/instructions.txt
 
-          DOCKER_IMAGE=ubuntu:23.10
+          DOCKER_IMAGE=ubuntu:24.04
           docker pull ${DOCKER_IMAGE}
           docker run \
           -t \
