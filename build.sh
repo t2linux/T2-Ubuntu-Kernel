@@ -71,13 +71,18 @@ echo >&2 "===]> Info: Bulding src... "
 
 cd "${KERNEL_PATH}"
 
-./debian/scripts/misc/annotations -c CONFIG_HID_APPLETB_BL --arch amd64 arm64 --flavour generic --write m
-./debian/scripts/misc/annotations -c CONFIG_HID_APPLETB_KBD --arch amd64 --flavour generic --write m
-./debian/scripts/misc/annotations -c CONFIG_DRM_APPLETBDRM --arch amd64 --flavour generic --write m
-./debian/scripts/misc/annotations -c CONFIG_BT_HCIBCM4377 --arch amd64 --flavour generic --write m
-./debian/scripts/misc/annotations -c CONFIG_APPLE_BCE --arch amd64 --flavour generic --write m
-./debian/scripts/misc/annotations -c CONFIG_APFS_FS --arch amd64 --flavour generic --write m
-./debian/scripts/misc/annotations -c CONFIG_MODULE_FORCE_UNLOAD --arch amd64 --flavour generic --write y
+for i in amd64 arm64 armhf ppc64el riscv64 s390x
+do
+
+./debian/scripts/misc/annotations -c CONFIG_HID_APPLETB_BL --arch $i --flavour generic --write m
+./debian/scripts/misc/annotations -c CONFIG_HID_APPLETB_KBD --arch $i --flavour generic --write m
+./debian/scripts/misc/annotations -c CONFIG_DRM_APPLETBDRM --arch $i --flavour generic --write m
+./debian/scripts/misc/annotations -c CONFIG_BT_HCIBCM4377 --arch $i --flavour generic --write m
+./debian/scripts/misc/annotations -c CONFIG_APPLE_BCE --arch $i --flavour generic --write m
+./debian/scripts/misc/annotations -c CONFIG_APFS_FS --arch $i --flavour generic --write m
+./debian/scripts/misc/annotations -c CONFIG_MODULE_FORCE_UNLOAD --arch $i --flavour generic --write y
+
+done
 
 # Build Deb packages
 sed -i "s/${KERNEL_REL}-${UBUNTU_REL}/${KERNEL_REL}-${UBUNTU_REL}+t2/g" debian.master/changelog
