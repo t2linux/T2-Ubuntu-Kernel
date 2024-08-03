@@ -30,7 +30,7 @@ jobs:
           shellcheck ./*.sh
   Create-tag:
     needs: [Lint]
-    runs-on: ubuntu-22.04
+    runs-on: ubuntu-latest
     steps:
       - name: 'Checkout Repo'
         uses: actions/checkout@v4
@@ -51,7 +51,7 @@ jobs:
           tag: "v${{ steps.build.outputs.tag }}"
   Build-Jammy:
     needs: [Create-tag]
-    runs-on: ubuntu-22.04
+    runs-on: ubuntu-latest
     steps:
       - name: Free up disk space for the CI
         uses: AdityaGarg8/remove-unwanted-software@v4
@@ -72,7 +72,20 @@ jobs:
           #REL=$( git tag |grep -F $VERSION|sort -r|head -n1|tr -d v)
           echo Building $VERSION-$REL
           echo "tag=${VERSION}-${REL}" >> $GITHUB_OUTPUT
-          sudo ./build.sh
+
+          DOCKER_IMAGE=ubuntu:22.04
+          docker pull ${DOCKER_IMAGE}
+          docker run \
+          -t \
+          -v "$(pwd)":/repo \
+          ${DOCKER_IMAGE} \
+          /bin/bash -c 'cd /repo && \
+          apt-get update && \
+          apt-get install -y lsb-release && \
+          mkdir /tmp/artifacts && \
+          ./build.sh && mkdir /repo/debs && \
+          cp -r /tmp/artifacts/* /repo/debs'
+          cp -r "$(pwd)"/debs/* /tmp/artifacts
 
           cd /tmp/artifacts
           #rm /tmp/artifacts/*dbg*
@@ -102,7 +115,7 @@ jobs:
 
   Build-Noble:
     needs: [Create-tag]
-    runs-on: ubuntu-22.04
+    runs-on: ubuntu-latest
     steps:
       - name: Free up disk space for the CI
         uses: AdityaGarg8/remove-unwanted-software@v4
@@ -166,7 +179,7 @@ jobs:
  
   Build-Bookworm:
     needs: [Create-tag]
-    runs-on: ubuntu-22.04
+    runs-on: ubuntu-latest
     steps:
       - name: Free up disk space for the CI
         uses: AdityaGarg8/remove-unwanted-software@v4
@@ -230,7 +243,7 @@ jobs:
 
   Build-Sid:
     needs: [Create-tag]
-    runs-on: ubuntu-22.04
+    runs-on: ubuntu-latest
     steps:
       - name: Free up disk space for the CI
         uses: AdityaGarg8/remove-unwanted-software@v4
@@ -294,7 +307,7 @@ jobs:
   
   Publish:
     needs: [Build-Jammy, Build-Noble, Build-Bookworm, Build-Sid]
-    runs-on: ubuntu-22.04
+    runs-on: ubuntu-latest
     steps:
 
       - name: 'Checkout Repo'
