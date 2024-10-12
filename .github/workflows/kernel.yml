@@ -225,7 +225,7 @@ jobs:
       - name: Upload package artifact
         uses: actions/upload-artifact@v4
         with:
-          name: linux-T2-${{ steps.build.outputs.tag }}-noble
+          name: linux-T2-${{ steps.build.outputs.tag }}-oracular
           path: /tmp/artifacts/*
 
       - name: Release
