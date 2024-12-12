@@ -50,8 +50,6 @@ Currently, 2 types of kernel variants are available. You can use anyone as per y
     sudo apt install linux-t2
     ```
 
-    **Note: The Mainline kernels are shipped by default if you have used the iso from [T2-Ubuntu](https://github.com/t2linux/T2-Ubuntu), but you STILL HAVE TO INSTALL THIS to receive kernel updates after installing Ubuntu**
-
 2. LTS kernels:
 
     If you want to install **LTS** kernels, install `linux-t2-lts` package:
