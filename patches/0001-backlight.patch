@@ -1,0 +1,26 @@
+From eab9195f86ea62a7826dac903582a32434df3b92 Mon Sep 17 00:00:00 2001
+From: Aditya Garg <gargaditya08@live.com>
+Date: Tue, 31 Dec 2024 19:27:38 +0530
+Subject: [PATCH] backlight
+
+---
+ drivers/hid/hid-appletb-bl.c | 3 +++
+ 1 file changed, 3 insertions(+)
+
+diff --git a/drivers/hid/hid-appletb-bl.c b/drivers/hid/hid-appletb-bl.c
+index 819157686..52a265472 100644
+--- a/drivers/hid/hid-appletb-bl.c
++++ b/drivers/hid/hid-appletb-bl.c
+@@ -201,6 +201,9 @@ static struct hid_driver appletb_bl_hid_driver = {
+ };
+ module_hid_driver(appletb_bl_hid_driver);
+ 
++/* The backlight driver should be loaded before the keyboard driver is initialised*/
++MODULE_SOFTDEP("pre: hid-appletb-bl");
++
+ MODULE_AUTHOR("Ronald Tschalär");
+ MODULE_AUTHOR("Kerem Karabay <kekrby@gmail.com>");
+ MODULE_DESCRIPTION("MacBookPro Touch Bar Backlight Driver");
+-- 
+2.43.0
+
