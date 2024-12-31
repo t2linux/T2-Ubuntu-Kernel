@@ -16,7 +16,7 @@ index ecc8c84f4..b07c394fb 100644
  module_hid_driver(appletb_kbd_hid_driver);
  
 +/* The backlight driver should be loaded before the keyboard driver is initialised*/
-+MODULE_SOFTDEP("pre: hid-appletb-bl");
++MODULE_SOFTDEP("pre: hid_appletb_bl");
 +
  MODULE_AUTHOR("Ronald Tschalär");
  MODULE_AUTHOR("Kerem Karabay <kekrby@gmail.com>");
