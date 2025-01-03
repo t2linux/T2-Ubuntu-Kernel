@@ -18,6 +18,7 @@ git clone --single-branch --branch ${T2_PATCHES_BRANCH_NAME} ${T2_PATCHES_GIT_UR
   "${BUILD_PATH}/linux-mbp-arch"
 cd "${BUILD_PATH}/linux-mbp-arch" || exit
 git checkout ${T2_PATCHES_COMMIT_HASH}
+rm -v 7001*
 
 while IFS= read -r file; do
   echo "==> Adding ${file}"
