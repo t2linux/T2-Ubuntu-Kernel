@@ -22,9 +22,11 @@ Firstly add the [t2-ubuntu-repo](https://adityagarg8.github.io/t2-ubuntu-repo/) 
 
     b) `noble` for **Ubuntu 24.04**
 
-    c) `bookworm` for **Debian 12**
+    c) `oracular` for **Ubuntu 24.10**
 
-    d) `sid` for **Debian unstable**
+    d) `bookworm` for **Debian 12**
+
+    e) `sid` for **Debian unstable**
 
     You can also run `lsb_release -a` to identify your codename.
 
@@ -47,8 +49,6 @@ Currently, 2 types of kernel variants are available. You can use anyone as per y
     ```bash
     sudo apt install linux-t2
     ```
-
-    **Note: The Mainline kernels are shipped by default if you have used the iso from [T2-Ubuntu](https://github.com/t2linux/T2-Ubuntu), but you STILL HAVE TO INSTALL THIS to receive kernel updates after installing Ubuntu**
 
 2. LTS kernels:
 
